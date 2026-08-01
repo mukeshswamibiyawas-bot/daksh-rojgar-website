@@ -269,3 +269,82 @@ body {
     }
 }
 
+
+/* ===== Dynamic Detail Pages ===== */
+
+.detail-loading,
+.detail-error {
+    color: #344a65;
+    font-size: 18px;
+    padding: 35px 0;
+    text-align: center;
+}
+
+.detail-error h1 {
+    color: #071c3d;
+    margin-bottom: 15px;
+}
+
+.detail-media {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.detail-media img {
+    border: 1px solid #b8d5f2;
+    border-radius: 14px;
+    max-height: 520px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 35px;
+}
+
+.detail-button {
+    background: #edf7ff;
+    border: 1px solid #9fc8f3;
+    border-radius: 8px;
+    color: #0b51d8;
+    display: inline-block;
+    font-weight: 700;
+    padding: 11px 18px;
+}
+
+.detail-button:hover {
+    background: #dceeff;
+}
+
+.detail-button.primary {
+    background: #0b51d8;
+    border-color: #0b51d8;
+    color: #ffffff;
+}
+
+.detail-section {
+    border-bottom: 1px solid #d9e7f5;
+    margin-bottom: 30px;
+    padding-bottom: 26px;
+}
+
+.detail-section:last-child {
+    border-bottom: 0;
+}
+
+.detail-section h2 {
+    color: #073170;
+    font-size: 23px;
+    margin-bottom: 13px;
+}
+
+.detail-section p {
+    color: #344a65;
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+
