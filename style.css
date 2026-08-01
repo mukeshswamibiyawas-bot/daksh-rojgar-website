@@ -348,3 +348,120 @@ body {
     margin-bottom: 10px;
 }
 
+
+/* ===== Live Admin Content Listing ===== */
+
+.listing-header {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.listing-header > span {
+    color: #0b51d8;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.listing-header h1 {
+    color: #071c3d;
+    font-size: 42px;
+    margin: 8px 0 12px;
+}
+
+.listing-header p {
+    color: #506781;
+    font-size: 17px;
+}
+
+.live-listing-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+}
+
+.live-listing-card {
+    background: #ffffff;
+    border: 1px solid #9fc8f3;
+    border-radius: 14px;
+    box-shadow:
+        0 7px 20px rgba(10, 71, 161, 0.09);
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+    padding: 25px;
+}
+
+.listing-meta {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.listing-meta span {
+    background: #e5f2ff;
+    border-radius: 20px;
+    color: #0b51d8;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 10px;
+    text-transform: uppercase;
+}
+
+.listing-meta time {
+    color: #6a7c91;
+    font-size: 12px;
+}
+
+.live-listing-card h2 {
+    color: #071c3d;
+    font-size: 21px;
+    line-height: 1.4;
+    margin-bottom: 13px;
+}
+
+.live-listing-card p {
+    color: #445a73;
+    flex: 1;
+    line-height: 1.7;
+}
+
+.listing-read-button {
+    align-self: flex-start;
+    background: #0b51d8;
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: 700;
+    margin-top: 20px;
+    padding: 10px 16px;
+}
+
+.listing-empty {
+    background: #ffffff;
+    border: 1px solid #9fc8f3;
+    border-radius: 14px;
+    grid-column: 1 / -1;
+    padding: 45px;
+    text-align: center;
+}
+
+@media (max-width: 950px) {
+    .live-listing-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 620px) {
+    .live-listing-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .listing-header h1 {
+        font-size: 32px;
+    }
+}
+
