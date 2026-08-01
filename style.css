@@ -465,3 +465,48 @@ body {
     }
 }
 
+
+/* ===== Job Detail Summary ===== */
+
+.detail-summary-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    margin-bottom: 28px;
+}
+
+.detail-summary-grid > div {
+    background: #edf7ff;
+    border: 1px solid #b8d5f2;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+}
+
+.detail-summary-grid strong {
+    color: #073170;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.detail-summary-grid span {
+    color: #344a65;
+    font-size: 16px;
+}
+
+@media (max-width: 850px) {
+    .detail-summary-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .detail-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
