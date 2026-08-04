@@ -195,8 +195,8 @@ function renderItems(items, itemType) {
         const rawSummary = getItemSummary(item);
         const summary = String(rawSummary).replace(/\s+/g, " ").trim();
         const shortSummary =
-            summary.length > 220
-                ? `${summary.slice(0, 220)}...`
+            summary.length > 75
+                ? `${summary.slice(0, 75)}...`
                 : summary;
 
         const category = getItemCategory(item, itemType);
@@ -338,3 +338,5 @@ async function loadListing() {
 }
 
 loadListing();
+
+
