@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>All Photo Tools | Daksh Rojgar</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="top">
+
+        <div class="date">
+            Online Photo Utility
+        </div>
+
+        <div class="brand">
+            <h1>DAKSH ◈ ROJGAR</h1>
+            <p>All Photo Tools Workbench</p>
+        </div>
+
+        <div class="actions">
+            Free Online Tool
+        </div>
+
+    </div>
+
+    <div class="nav">
+
+        <button
+            id="menuBtn"
+            type="button"
+            aria-label="Open menu"
+        >
+            ☰
+        </button>
+
+        <nav id="mainNav">
+            <a href="index.html">Home</a>
+            <a href="photo-tools.html">Photo Tools</a>
+            <a class="active" href="background-change.html">
+                Background Change
+            </a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main class="wrap">
+
+    <section class="listing-hero">
+
+        <span class="listing-label">
+            PHOTO BACKGROUND TOOL
+        </span>
+
+        <h1>All Photo Tools Workbench</h1>
+
+        <p>
+            Upload one photo and use all available tools
+            and download the edited image.
+        </p>
+
+    </section>
+
+
+    <section class="background-tool-panel">
+
+        <div class="background-tool-controls">
+
+            <label
+                for="backgroundImageInput"
+                class="background-upload-label"
+            >
+                Select Photo
+            </label>
+
+            <input
+                id="backgroundImageInput"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+            >
+
+            <div class="background-color-options">
+
+                <button
+                    type="button"
+                    class="background-color-button active"
+                    data-color="#ffffff"
+                >
+                    White
+                </button>
+
+                <button
+                    type="button"
+                    class="background-color-button"
+                    data-color="#2196f3"
+                >
+                    Blue
+                </button>
+
+                <button
+                    type="button"
+                    class="background-color-button"
+                    data-color="#f44336"
+                >
+                    Red
+                </button>
+
+                <label class="background-custom-color">
+                    Custom
+
+                    <input
+                        id="customBackgroundColor"
+                        type="color"
+                        value="#ffffff"
+                    >
+                </label>
+
+            </div>
+
+            <button
+                id="downloadBackgroundImage"
+                type="button"
+                disabled
+            >
+                Download Photo
+            </button>
+
+            <p id="backgroundStatus">
+                Select a photo to begin.
+            </p>
+
+        </div>
+
+
+        <div class="background-preview-area">
+
+            <div
+                id="backgroundPreviewBox"
+                class="background-preview-box"
+            >
+                <span>
+                    Photo preview will appear here
+                </span>
+            </div>
+
+            <canvas
+                id="backgroundCanvas"
+                hidden
+            ></canvas>
+
+        </div>
+
+    </section>
+        <section
+            id="photoActionPanel"
+            class="photo-action-panel"
+            hidden
+        >
+
+            <div class="photo-action-heading">
+                <h2>What do you want to do with this photo?</h2>
+                <p>
+                    Select any tool below. Your uploaded photo
+                    will be used in the selected tool.
+                </p>
+            </div>
+
+            <div class="photo-action-grid">
+
+                <button
+                    type="button"
+                    class="photo-action-card active"
+                    data-action="background"
+                >
+                    <span>🎨</span>
+                    <strong>Background Change</strong>
+                    <small>White, blue, red or custom color</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-action="passport"
+                >
+                    <span>🪪</span>
+                    <strong>Passport Size</strong>
+                    <small>Prepare passport-size photo</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-action="four-by-six"
+                >
+                    <span>🖨️</span>
+                    <strong>4×6 Photo Maker</strong>
+                    <small>Create printable photo sheet</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-action="name-add"
+                >
+                    <span>✍️</span>
+                    <strong>Name Add</strong>
+                    <small>Add name, date or text</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-action="resize"
+                >
+                    <span>📐</span>
+                    <strong>Resize</strong>
+                    <small>Change width and height</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-action="compress"
+                >
+                    <span>🗜️</span>
+                    <strong>Compress</strong>
+                    <small>Reduce photo file size</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-action="crop"
+                >
+                    <span>✂️</span>
+                    <strong>Crop</strong>
+                    <small>Remove unwanted area</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-action="convert"
+                >
+                    <span>🖼️</span>
+                    <strong>JPG / PNG</strong>
+                    <small>Convert image format</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-action="kb-size"
+                >
+                    <span>⚙️</span>
+                    <strong>Size in KB</strong>
+                    <small>Prepare for online forms</small>
+                </button>
+
+            </div>
+
+        </section>
+
+
+</main>
+
+
+<footer>
+
+    <div class="foot">
+
+        <div>
+            <h3>Daksh Rojgar</h3>
+
+            <p>
+                Government Jobs, Admit Cards, Results
+                and useful online tools.
+            </p>
+        </div>
+
+        <div>
+            <h4>Quick Links</h4>
+            <a href="index.html">Home</a>
+            <a href="photo-tools.html">Photo Tools</a>
+            <a href="contact.html">Contact</a>
+        </div>
+
+        <div>
+            <h4>Legal</h4>
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms.html">Terms</a>
+            <a href="disclaimer.html">Disclaimer</a>
+        </div>
+
+    </div>
+
+    <div class="copy">
+        © <span id="year">2026</span> Daksh Rojgar
+    </div>
+
+</footer>
+
+<script type="module" src="photo-workbench.js"></script>
+
+</body>
+</html>
+
+
+

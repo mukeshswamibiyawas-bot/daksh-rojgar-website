@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Photo Tools | Daksh Rojgar</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="top">
+
+        <div class="date">
+            Online Photo Utilities
+        </div>
+
+        <div class="brand">
+            <h1>DAKSH ◈ ROJGAR</h1>
+            <p>Photo Tools</p>
+        </div>
+
+        <div class="actions">
+            Free Online Tools
+        </div>
+
+    </div>
+
+    <div class="nav">
+
+        <button
+            id="menuBtn"
+            type="button"
+            aria-label="Open menu"
+        >
+            ☰
+        </button>
+
+        <nav id="mainNav">
+            <a href="index.html">Home</a>
+            <a href="listing.html?module=jobs">Jobs</a>
+            <a href="listing.html?module=admit_card">Admit Cards</a>
+            <a href="listing.html?module=result">Results</a>
+            <a class="active" href="photo-tools.html">Photo Tools</a>
+        </nav>
+
+    </div>
+</header>
+
+<main class="wrap">
+
+    <section class="listing-hero">
+
+        <span class="listing-label">
+            ONLINE PHOTO UTILITIES
+        </span>
+
+        <h1>Photo Tools</h1>
+
+        <p>
+            Resize, compress, crop, change background and
+            prepare application photos directly in your browser.
+        </p>
+
+    </section>
+
+    <section class="cards photo-tools-grid">
+
+        <a
+            class="card"
+            href="#"
+            id="backgroundChangeTool"
+        >
+            <div class="icon">🎨</div>
+            <h3>Background Change</h3>
+            <p>
+                Change photo background to white, blue,
+                red or another selected color.
+            </p>
+            <span>→</span>
+        </a>
+
+        <a
+            class="card"
+            href="#"
+            id="passportPhotoTool"
+        >
+            <div class="icon">🪪</div>
+            <h3>Passport Size Photo Maker</h3>
+            <p>
+                Prepare passport-size photos for forms,
+                IDs and applications.
+            </p>
+            <span>→</span>
+        </a>
+
+        <a
+            class="card"
+            href="#"
+            id="fourBySixPhotoTool"
+        >
+            <div class="icon">🖨️</div>
+            <h3>4×6 Photo Maker</h3>
+            <p>
+                Arrange multiple passport photos on a
+                printable 4×6 inch photo sheet.
+            </p>
+            <span>→</span>
+        </a>
+
+        <a
+            class="card"
+            href="#"
+            id="nameAddTool"
+        >
+            <div class="icon">✍️</div>
+            <h3>Name Add</h3>
+            <p>
+                Add name, date or custom text below
+                a photograph.
+            </p>
+            <span>→</span>
+        </a>
+
+        <a
+            class="card"
+            href="#"
+            id="photoResizeTool"
+        >
+            <div class="icon">📐</div>
+            <h3>Photo Resize</h3>
+            <p>
+                Resize a photograph by width and height.
+            </p>
+            <span>→</span>
+        </a>
+
+        <a
+            class="card"
+            href="#"
+            id="photoCompressTool"
+        >
+            <div class="icon">🗜️</div>
+            <h3>Photo Compress</h3>
+            <p>
+                Reduce photo file size while keeping
+                useful quality.
+            </p>
+            <span>→</span>
+        </a>
+
+        <a
+            class="card"
+            href="#"
+            id="photoCropTool"
+        >
+            <div class="icon">✂️</div>
+            <h3>Photo Crop</h3>
+            <p>
+                Crop unwanted areas from a photograph.
+            </p>
+            <span>→</span>
+        </a>
+
+        <a
+            class="card"
+            href="#"
+            id="jpgTool"
+        >
+            <div class="icon">🖼️</div>
+            <h3>JPG / PNG Converter</h3>
+            <p>
+                Convert images between JPG and PNG formats.
+            </p>
+            <span>→</span>
+        </a>
+
+        <a
+            class="card"
+            href="#"
+            id="photoKbTool"
+        >
+            <div class="icon">⚙️</div>
+            <h3>Photo Size in KB</h3>
+            <p>
+                Prepare photographs within the KB limit
+                required by online forms.
+            </p>
+            <span>→</span>
+        </a>
+
+    </section>
+
+</main>
+
+<footer>
+
+    <div class="foot">
+
+        <div>
+            <h3>Daksh Rojgar</h3>
+            <p>
+                Government Jobs, Results, Admit Cards
+                and useful online tools.
+            </p>
+        </div>
+
+        <div>
+            <h4>Quick Links</h4>
+            <a href="index.html">Home</a>
+            <a href="listing.html?module=jobs">Jobs</a>
+            <a href="contact.html">Contact</a>
+        </div>
+
+        <div>
+            <h4>Legal</h4>
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms.html">Terms</a>
+            <a href="disclaimer.html">Disclaimer</a>
+        </div>
+
+    </div>
+
+    <div class="copy">
+        © <span id="year">2026</span> Daksh Rojgar
+    </div>
+
+</footer>
+
+<script>
+    const year = document.getElementById("year");
+
+    if (year) {
+        year.textContent = new Date().getFullYear();
+    }
+
+    const menuButton = document.getElementById("menuBtn");
+    const mainNavigation = document.getElementById("mainNav");
+
+    if (menuButton && mainNavigation) {
+        menuButton.addEventListener("click", () => {
+            mainNavigation.classList.toggle("open");
+        });
+    }
+</script>
+
+</body>
+</html>
