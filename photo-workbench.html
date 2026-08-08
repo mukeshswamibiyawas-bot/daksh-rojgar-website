@@ -8,7 +8,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>All Photo Tools | Daksh Rojgar</title>
+    <title>Photo Tools | Daksh Rojgar</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -24,7 +24,7 @@
 
         <div class="brand">
             <h1>DAKSH ◈ ROJGAR</h1>
-            <p>All Photo Tools Workbench</p>
+            <p>Photo Tools</p>
         </div>
 
         <div class="actions">
@@ -45,10 +45,7 @@
 
         <nav id="mainNav">
             <a href="index.html">Home</a>
-            <a href="photo-tools.html">Photo Tools</a>
-            <a class="active" href="background-change.html">
-                Background Change
-            </a>
+            <a href="photo-tools.html" class="active">Photo Tools</a>
         </nav>
 
     </div>
@@ -63,7 +60,7 @@
             PHOTO BACKGROUND TOOL
         </span>
 
-        <h1>All Photo Tools Workbench</h1>
+        <h1>Photo Tools</h1>
 
         <p>
             Upload one photo and use all available tools
@@ -72,8 +69,7 @@
 
     </section>
 
-
-    <section class="background-tool-panel">
+<section class="background-tool-panel">
 
         <div class="background-tool-controls">
 
@@ -90,46 +86,23 @@
                 accept="image/jpeg,image/png,image/webp"
             >
 
-            <div class="background-color-options">
-
+            <div
+                id="backgroundToolControls"
+                class="background-color-options"
+                hidden
+            >
                 <button
+                    id="makeWhiteBackground"
                     type="button"
                     class="background-color-button active"
-                    data-color="#ffffff"
                 >
-                    White
+                    Make White Background
                 </button>
-
-                <button
-                    type="button"
-                    class="background-color-button"
-                    data-color="#2196f3"
-                >
-                    Blue
-                </button>
-
-                <button
-                    type="button"
-                    class="background-color-button"
-                    data-color="#f44336"
-                >
-                    Red
-                </button>
-
-                <label class="background-custom-color">
-                    Custom
-
-                    <input
-                        id="customBackgroundColor"
-                        type="color"
-                        value="#ffffff"
-                    >
-                </label>
-
             </div>
 
             <button
                 id="downloadBackgroundImage"
+                hidden
                 type="button"
                 disabled
             >
@@ -161,8 +134,571 @@
 
         </div>
 
-    </section>
-        <section
+    
+        </section>
+        <div class="unified-photo-tools-area">
+
+            
+
+<section
+    id="fourBySixToolPanel"
+    class="photo-processing-panel"
+    hidden
+>
+    <div class="photo-processing-heading">
+        <h2>4×6 Photo Maker</h2>
+        <p>
+            Arrange multiple passport photos on a printable 4×6 inch photo sheet.
+        </p>
+    </div>
+
+    <div class="photo-processing-controls">
+
+        <label>
+            Photo Size
+            <select id="fourBySixPhotoSize">
+                <option value="35x45">35 × 45 mm</option>
+                <option value="2x2">2 × 2 inch</option>
+            </select>
+        </label>
+
+        <label>
+            Number of Photos
+            <select id="fourBySixPhotoCount">
+                <option value="1">1 Photo - Full 4×6</option>
+                <option value="4">4 Photos</option>
+                <option value="6" selected>6 Photos</option>
+                <option value="8">8 Photos</option>
+            </select>
+        </label>
+
+        <label id="fourBySixModeLabel">
+            Single Photo Mode
+            <select id="fourBySixMode">
+                <option value="fit" selected>Fit Photo - Full Image</option>
+                <option value="fill">Fill 4×6 - Crop to Fill</option>
+            </select>
+        </label>
+
+        <button
+            id="generateFourBySix"
+            type="button"
+        >
+            Generate 4×6 Sheet
+        </button>
+
+        <button
+            id="downloadFourBySix"
+            type="button"
+            disabled
+        >
+            Download 4×6 Photo
+        </button>
+
+    </div>
+
+    <div class="passport-preview-wrapper">
+        <canvas id="fourBySixCanvas"></canvas>
+    </div>
+
+</section>
+
+
+<section
+    id="nameAddToolPanel"
+    class="photo-processing-panel"
+    hidden
+>
+    <div class="photo-processing-heading">
+        <h2>Name / Date Add</h2>
+        <p>
+            Add name, date or custom text to the selected photo.
+        </p>
+    </div>
+
+    <div class="name-add-controls">
+
+        <label>
+            Name / Text
+            <input
+                id="nameAddText"
+                type="text"
+                placeholder="Enter name or text"
+            >
+        </label>
+
+        <label>
+            Date / Second Line
+            <input
+                id="nameAddDate"
+                type="text"
+                placeholder="Example: 08-08-2026"
+            >
+        </label>
+
+        <label>
+            Font Size
+            <select id="nameAddFontSize">
+                <option value="24">Small</option>
+                <option value="32" selected>Medium</option>
+                <option value="42">Large</option>
+                <option value="52">Extra Large</option>
+            </select>
+        </label>
+
+        <label>
+            Text Color
+            <input
+                id="nameAddColor"
+                type="color"
+                value="#000000"
+            >
+        </label>
+
+        <label>
+            Position
+            <select id="nameAddPosition">
+                <option value="bottom" selected>Bottom</option>
+                <option value="top">Top</option>
+            </select>
+        </label>
+
+        <label>
+            Background Strip
+            <select id="nameAddStrip">
+                <option value="white" selected>White</option>
+                <option value="transparent">Transparent</option>
+                <option value="black">Black</option>
+            </select>
+        </label>
+
+        <button
+            id="generateNameAdd"
+            type="button"
+        >
+            Apply Name / Text
+        </button>
+
+        <button
+            id="downloadNameAdd"
+            type="button"
+            disabled
+        >
+            Download Photo
+        </button>
+
+    </div>
+
+    <div class="passport-preview-wrapper">
+        <canvas id="nameAddCanvas"></canvas>
+    </div>
+
+</section>
+
+
+
+<section
+    id="resizeToolPanel"
+    class="photo-processing-panel"
+    hidden
+>
+    <div class="photo-processing-heading">
+        <h2>Photo Resize</h2>
+        <p>
+            Change photo width and height while keeping image quality.
+        </p>
+    </div>
+
+    <div class="resize-controls">
+
+        <label>
+            Width (px)
+            <input
+                id="resizeWidth"
+                type="number"
+                min="1"
+                placeholder="Width"
+            >
+        </label>
+
+        <label>
+            Height (px)
+            <input
+                id="resizeHeight"
+                type="number"
+                min="1"
+                placeholder="Height"
+            >
+        </label>
+
+        <label>
+            Preset Size
+            <select id="resizePreset">
+                <option value="">Custom Size</option>
+                <option value="300x300">300 × 300</option>
+                <option value="600x600">600 × 600</option>
+                <option value="800x600">800 × 600</option>
+                <option value="1920x1080">1920 × 1080</option>
+            </select>
+        </label>
+
+        <label class="resize-lock-label">
+            <input
+                id="resizeKeepRatio"
+                type="checkbox"
+                checked
+            >
+            Keep Aspect Ratio
+        </label>
+
+        <button
+            id="generateResize"
+            type="button"
+        >
+            Resize Photo
+        </button>
+
+        <button
+            id="downloadResize"
+            type="button"
+            disabled
+        >
+            Download Resized Photo
+        </button>
+
+    </div>
+
+    <div
+        id="resizeInfo"
+        class="resize-info"
+    >
+        Select a photo to see its original size.
+    </div>
+
+    <div class="passport-preview-wrapper">
+        <canvas id="resizeCanvas"></canvas>
+    </div>
+
+</section>
+
+
+
+<section
+    id="compressToolPanel"
+    class="photo-processing-panel"
+    hidden
+>
+    <div class="photo-processing-heading">
+        <h2>Photo Compress</h2>
+        <p>
+            Reduce photo file size while keeping useful image quality.
+        </p>
+    </div>
+
+    <div class="compress-controls">
+
+        <label>
+            Quality
+            <select id="compressQuality">
+                <option value="0.95">95% - High Quality</option>
+                <option value="0.85" selected>85% - Recommended</option>
+                <option value="0.75">75% - Medium</option>
+                <option value="0.60">60% - Small Size</option>
+                <option value="0.40">40% - Maximum Compression</option>
+            </select>
+        </label>
+
+        <label>
+            Output Format
+            <select id="compressFormat">
+                <option value="image/jpeg" selected>JPG / JPEG</option>
+                <option value="image/webp">WebP</option>
+            </select>
+        </label>
+
+        <button
+            id="generateCompress"
+            type="button"
+        >
+            Compress Photo
+        </button>
+
+        <button
+            id="downloadCompress"
+            type="button"
+            disabled
+        >
+            Download Compressed Photo
+        </button>
+
+    </div>
+
+    <div
+        id="compressInfo"
+        class="compress-info"
+    >
+        Original Size: waiting for photo...
+    </div>
+
+    <div class="passport-preview-wrapper">
+        <canvas id="compressCanvas"></canvas>
+    </div>
+
+</section>
+
+
+
+<section
+    id="cropToolPanel"
+    class="photo-processing-panel"
+    hidden
+>
+    <div class="photo-processing-heading">
+        <h2>Photo Crop</h2>
+        <p>
+            Crop unwanted areas and prepare the photo in a useful ratio.
+        </p>
+    </div>
+
+    <div class="crop-controls">
+
+        <label>
+            Crop Ratio
+            <select id="cropRatio">
+                <option value="free" selected>Free Crop</option>
+                <option value="1:1">Square 1:1</option>
+                <option value="35:45">Passport 35:45</option>
+                <option value="4:6">4:6 Portrait</option>
+                <option value="16:9">16:9 Landscape</option>
+            </select>
+        </label>
+
+        <label>
+            Zoom
+            <input
+                id="cropZoom"
+                type="range"
+                min="1"
+                max="3"
+                step="0.05"
+                value="1"
+            >
+        </label>
+
+        <label>
+            Horizontal Position
+            <input
+                id="cropPositionX"
+                type="range"
+                min="0"
+                max="100"
+                value="50"
+            >
+        </label>
+
+        <label>
+            Vertical Position
+            <input
+                id="cropPositionY"
+                type="range"
+                min="0"
+                max="100"
+                value="50"
+            >
+        </label>
+
+        <button
+            id="generateCrop"
+            type="button"
+        >
+            Apply Crop
+        </button>
+
+        <button
+            id="downloadCrop"
+            type="button"
+            disabled
+        >
+            Download Cropped Photo
+        </button>
+
+    </div>
+
+    <div
+        id="cropInfo"
+        class="crop-info"
+    >
+        Select a crop ratio and adjust the photo.
+    </div>
+
+    <div class="passport-preview-wrapper">
+        <canvas id="cropCanvas"></canvas>
+    </div>
+
+</section>
+
+
+
+<section
+    id="convertToolPanel"
+    class="photo-processing-panel"
+    hidden
+>
+    <div class="photo-processing-heading">
+        <h2>JPG / PNG Converter</h2>
+        <p>
+            Convert the selected photo between JPG, PNG and WebP formats.
+        </p>
+    </div>
+
+    <div class="convert-controls">
+
+        <label>
+            Output Format
+            <select id="convertFormat">
+                <option value="image/jpeg" selected>JPG / JPEG</option>
+                <option value="image/png">PNG</option>
+                <option value="image/webp">WebP</option>
+            </select>
+        </label>
+
+        <label>
+            JPG / WebP Quality
+            <select id="convertQuality">
+                <option value="0.95" selected>95% - High Quality</option>
+                <option value="0.85">85% - Recommended</option>
+                <option value="0.75">75% - Medium</option>
+                <option value="0.60">60% - Smaller File</option>
+            </select>
+        </label>
+
+        <label>
+            JPEG Background
+            <select id="convertBackground">
+                <option value="white" selected>White</option>
+                <option value="black">Black</option>
+            </select>
+        </label>
+
+        <button
+            id="generateConvert"
+            type="button"
+        >
+            Convert Photo
+        </button>
+
+        <button
+            id="downloadConvert"
+            type="button"
+            disabled
+        >
+            Download Converted Photo
+        </button>
+
+    </div>
+
+    <div
+        id="convertInfo"
+        class="convert-info"
+    >
+        Select an output format.
+    </div>
+
+    <div class="passport-preview-wrapper">
+        <canvas id="convertCanvas"></canvas>
+    </div>
+
+</section>
+
+
+
+<section
+    id="kbSizeToolPanel"
+    class="photo-processing-panel"
+    hidden
+>
+    <div class="photo-processing-heading">
+        <h2>Photo Size in KB</h2>
+        <p>
+            Prepare a photo close to the required KB limit for online forms.
+        </p>
+    </div>
+
+    <div class="kb-size-controls">
+
+        <label>
+            Target Size
+            <select id="kbSizeTarget">
+                <option value="20">20 KB</option>
+                <option value="50" selected>50 KB</option>
+                <option value="100">100 KB</option>
+                <option value="200">200 KB</option>
+                <option value="custom">Custom KB</option>
+            </select>
+        </label>
+
+        <label>
+            Custom KB
+            <input
+                id="kbSizeCustom"
+                type="number"
+                min="5"
+                max="5000"
+                placeholder="Enter KB"
+                disabled
+            >
+        </label>
+
+        <label>
+            Minimum Quality
+            <select id="kbSizeMinQuality">
+                <option value="0.40">40%</option>
+                <option value="0.50" selected>50%</option>
+                <option value="0.60">60%</option>
+                <option value="0.70">70%</option>
+            </select>
+        </label>
+
+        <label>
+            Output Format
+            <select id="kbSizeFormat">
+                <option value="image/jpeg" selected>JPG / JPEG</option>
+                <option value="image/webp">WebP</option>
+            </select>
+        </label>
+
+        <button
+            id="generateKbSize"
+            type="button"
+        >
+            Prepare Photo
+        </button>
+
+        <button
+            id="downloadKbSize"
+            type="button"
+            disabled
+        >
+            Download Photo
+        </button>
+
+    </div>
+
+    <div
+        id="kbSizeInfo"
+        class="kb-size-info"
+    >
+        Select a target size.
+    </div>
+
+    <div class="passport-preview-wrapper">
+        <canvas id="kbSizeCanvas"></canvas>
+    </div>
+
+</section>
+
+
+<section
             id="photoActionPanel"
             class="photo-action-panel"
             hidden
@@ -270,7 +806,91 @@
 
             </div>
 
-        </section>
+        
+        <div class="unified-photo-tools-area">
+
+            
+
+
+            <div
+                id="selectedToolWorkspace"
+                class="selected-tool-workspace"
+            >
+                <section
+    id="passportToolPanel"
+    class="photo-processing-panel"
+    hidden
+>
+    <div class="photo-processing-heading">
+        <h2>Passport Size Photo Maker</h2>
+        <p>
+            Prepare a standard passport-size photo from the uploaded image.
+        </p>
+    </div>
+
+    <div class="passport-controls">
+
+        <label>
+            Photo Size
+            <select id="passportSizeSelect">
+                <option value="35x45">35 × 45 mm</option>
+                <option value="2x2">2 × 2 inch</option>
+                <option value="custom">Custom Size</option>
+            </select>
+        </label>
+
+        <button
+            id="generatePassportPhoto"
+            type="button"
+        >
+            Generate Passport Photo
+        </button>
+
+        <button
+            id="downloadPassportPhoto"
+            type="button"
+            disabled
+        >
+            Download Passport Photo
+        </button>
+
+    </div>
+
+    <div class="passport-preview-wrapper">
+        <canvas id="passportCanvas"></canvas>
+    </div>
+</section>
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+
+            <div
+                id="selectedToolWorkspace"
+                class="selected-tool-workspace"
+            >
+                
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+    
+        
+
+
+
+
+
 
 
 </main>
@@ -315,6 +935,13 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 

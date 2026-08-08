@@ -959,3 +959,1163 @@ body {
     }
 }
 
+
+/* ========================================
+   PASSPORT SIZE PHOTO TOOL
+======================================== */
+
+.photo-processing-panel {
+    max-width: 1050px;
+    margin: 20px auto 50px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #d7e0ea;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+}
+
+.photo-processing-heading {
+    margin-bottom: 18px;
+}
+
+.photo-processing-heading h2 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    color: #0b1d39;
+}
+
+.photo-processing-heading p {
+    margin: 0;
+    color: #5c6b7d;
+    font-size: 14px;
+}
+
+.passport-controls {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.passport-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-weight: 700;
+    color: #0b1d39;
+}
+
+.passport-controls select {
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid #cfd9e5;
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 14px;
+}
+
+#generatePassportPhoto,
+#downloadPassportPhoto {
+    min-height: 46px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#generatePassportPhoto {
+    background: #075bd8;
+    color: #ffffff;
+}
+
+#generatePassportPhoto:hover {
+    background: #034bb7;
+}
+
+#downloadPassportPhoto {
+    background: #129447;
+    color: #ffffff;
+}
+
+#downloadPassportPhoto:disabled {
+    background: #aeb9c8;
+    cursor: not-allowed;
+}
+
+.passport-preview-wrapper {
+    min-height: 320px;
+    padding: 20px;
+    border: 2px dashed #b6c4d5;
+    border-radius: 12px;
+    background:
+        linear-gradient(
+            45deg,
+            #f1f4f8 25%,
+            transparent 25%
+        ),
+        linear-gradient(
+            -45deg,
+            #f1f4f8 25%,
+            transparent 25%
+        ),
+        linear-gradient(
+            45deg,
+            transparent 75%,
+            #f1f4f8 75%
+        ),
+        linear-gradient(
+            -45deg,
+            transparent 75%,
+            #f1f4f8 75%
+        );
+    background-size: 24px 24px;
+    background-position:
+        0 0,
+        0 12px,
+        12px -12px,
+        -12px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+#passportCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 520px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 700px) {
+    .photo-processing-panel {
+        margin: 15px;
+        padding: 18px;
+    }
+
+    .passport-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .passport-preview-wrapper {
+        min-height: 250px;
+    }
+}
+
+
+/* ========================================
+   SELECTED TOOL WORKSPACE — TOP AREA
+======================================== */
+
+.selected-tool-workspace {
+    max-width: 1050px;
+    margin: -20px auto 20px;
+}
+
+.selected-tool-workspace .photo-processing-panel {
+    margin: 0;
+}
+
+.selected-tool-workspace:has(
+    .photo-processing-panel[hidden]
+) {
+    margin-bottom: 0;
+}
+
+
+/* Passport process inside main photo box */
+
+.background-tool-panel #passportToolPanel {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    margin: 10px 0 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.background-tool-panel #passportToolPanel[hidden] {
+    display: none;
+}
+
+.background-tool-panel .passport-preview-wrapper {
+    min-height: 280px;
+}
+
+
+/* ========================================
+   UNIFIED PHOTO TOOLS LAYOUT
+======================================== */
+
+.background-tool-panel {
+    grid-template-columns: 330px 1fr;
+}
+
+.unified-photo-tools-area {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid #d7e0ea;
+}
+
+.unified-photo-tools-area .photo-action-panel {
+    max-width: none;
+    margin: 0 0 20px;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+}
+
+.unified-photo-tools-area .selected-tool-workspace {
+    max-width: none;
+    margin: 0;
+}
+
+.unified-photo-tools-area .photo-processing-panel {
+    max-width: none;
+    margin: 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#backgroundToolControls[hidden],
+#downloadBackgroundImage[hidden] {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .background-tool-panel {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ========================================
+   UNIFIED PHOTO TOOLS LAYOUT
+======================================== */
+
+.background-tool-panel {
+    grid-template-columns: 330px 1fr;
+}
+
+.unified-photo-tools-area {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid #d7e0ea;
+}
+
+.unified-photo-tools-area .photo-action-panel {
+    max-width: none;
+    margin: 0 0 20px;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+}
+
+.unified-photo-tools-area .selected-tool-workspace {
+    max-width: none;
+    margin: 0;
+}
+
+.unified-photo-tools-area .photo-processing-panel {
+    max-width: none;
+    margin: 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#backgroundToolControls[hidden],
+#downloadBackgroundImage[hidden] {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .background-tool-panel {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ========================================
+   4x6 PHOTO MAKER PANEL
+======================================== */
+
+#fourBySixToolPanel {
+    width: 100%;
+    margin: 20px 0 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#fourBySixToolPanel[hidden] {
+    display: none;
+}
+
+.photo-processing-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 20px;
+}
+
+.photo-processing-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-weight: 700;
+    color: #0b1d39;
+}
+
+.photo-processing-controls select {
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid #cfd9e5;
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 14px;
+}
+
+#generateFourBySix,
+#downloadFourBySix {
+    min-height: 46px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#generateFourBySix {
+    background: #075bd8;
+    color: #ffffff;
+}
+
+#generateFourBySix:hover {
+    background: #034bb7;
+}
+
+#downloadFourBySix {
+    background: #129447;
+    color: #ffffff;
+}
+
+#downloadFourBySix:disabled {
+    background: #aeb9c8;
+    cursor: not-allowed;
+}
+
+#fourBySixToolPanel .passport-preview-wrapper {
+    width: 100%;
+    min-height: 420px;
+    padding: 24px;
+    border: 2px dashed #b6c4d5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+#fourBySixCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 650px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 700px) {
+    .photo-processing-controls {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ===== 4x6 FULL WIDTH GRID FIX ===== */
+
+.background-tool-panel > #fourBySixToolPanel {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    align-self: start;
+
+    width: 100%;
+    max-width: none;
+
+    margin: 22px 0 0;
+    padding: 22px 0 0;
+
+    box-sizing: border-box;
+}
+
+.background-tool-panel > #fourBySixToolPanel .photo-processing-controls {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.background-tool-panel > #fourBySixToolPanel .passport-preview-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.background-tool-panel > #fourBySixToolPanel #fourBySixCanvas {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 650px;
+}
+
+
+/* ========================================
+   NAME ADD TOOL
+======================================== */
+
+#nameAddToolPanel {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    margin: 22px 0 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#nameAddToolPanel[hidden] {
+    display: none;
+}
+
+.name-add-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 20px;
+}
+
+.name-add-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-weight: 700;
+    color: #0b1d39;
+}
+
+.name-add-controls input,
+.name-add-controls select {
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid #cfd9e5;
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+#nameAddColor {
+    padding: 4px;
+}
+
+#generateNameAdd,
+#downloadNameAdd {
+    min-height: 46px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#generateNameAdd {
+    background: #075bd8;
+    color: #ffffff;
+}
+
+#downloadNameAdd {
+    background: #129447;
+    color: #ffffff;
+}
+
+#downloadNameAdd:disabled {
+    background: #aeb9c8;
+    cursor: not-allowed;
+}
+
+#nameAddCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 650px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 700px) {
+    .name-add-controls {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ========================================
+   PHOTO RESIZE TOOL
+======================================== */
+
+#resizeToolPanel {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    margin: 22px 0 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#resizeToolPanel[hidden] {
+    display: none;
+}
+
+.resize-controls {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 16px;
+}
+
+.resize-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-weight: 700;
+}
+
+.resize-controls input,
+.resize-controls select {
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid #cfd9e5;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.resize-lock-label {
+    justify-content: center;
+}
+
+.resize-lock-label input {
+    min-height: auto;
+    width: 18px;
+    height: 18px;
+}
+
+#generateResize,
+#downloadResize {
+    min-height: 46px;
+    border: 0;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#generateResize {
+    background: #075bd8;
+    color: #ffffff;
+}
+
+#downloadResize {
+    background: #129447;
+    color: #ffffff;
+}
+
+#downloadResize:disabled {
+    background: #aeb9c8;
+    cursor: not-allowed;
+}
+
+.resize-info {
+    margin: 8px 0 16px;
+    padding: 10px 12px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    color: #526174;
+}
+
+#resizeCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 650px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 700px) {
+    .resize-controls {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ========================================
+   PHOTO COMPRESS TOOL
+======================================== */
+
+#compressToolPanel {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    margin: 22px 0 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#compressToolPanel[hidden] {
+    display: none;
+}
+
+.compress-controls {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 16px;
+}
+
+.compress-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-weight: 700;
+}
+
+.compress-controls select {
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid #cfd9e5;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+#generateCompress,
+#downloadCompress {
+    min-height: 46px;
+    border: 0;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#generateCompress {
+    background: #075bd8;
+    color: #ffffff;
+}
+
+#downloadCompress {
+    background: #129447;
+    color: #ffffff;
+}
+
+#downloadCompress:disabled {
+    background: #aeb9c8;
+    cursor: not-allowed;
+}
+
+.compress-info {
+    margin: 8px 0 16px;
+    padding: 10px 12px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    color: #526174;
+}
+
+#compressCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 650px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 700px) {
+    .compress-controls {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ========================================
+   PHOTO CROP TOOL
+======================================== */
+
+#cropToolPanel {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    margin: 22px 0 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#cropToolPanel[hidden] {
+    display: none;
+}
+
+.crop-controls {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 16px;
+}
+
+.crop-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-weight: 700;
+}
+
+.crop-controls select,
+.crop-controls input {
+    min-height: 44px;
+}
+
+#generateCrop,
+#downloadCrop {
+    min-height: 46px;
+    border: 0;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#generateCrop {
+    background: #075bd8;
+    color: #ffffff;
+}
+
+#downloadCrop {
+    background: #129447;
+    color: #ffffff;
+}
+
+#downloadCrop:disabled {
+    background: #aeb9c8;
+    cursor: not-allowed;
+}
+
+.crop-info {
+    margin: 8px 0 16px;
+    padding: 10px 12px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    color: #526174;
+}
+
+#cropCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 650px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 700px) {
+    .crop-controls {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ========================================
+   JPG PNG WEBP CONVERTER
+======================================== */
+
+#convertToolPanel {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    margin: 22px 0 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#convertToolPanel[hidden] {
+    display: none;
+}
+
+.convert-controls {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 16px;
+}
+
+.convert-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-weight: 700;
+}
+
+.convert-controls select {
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid #cfd9e5;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+#generateConvert,
+#downloadConvert {
+    min-height: 46px;
+    border: 0;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#generateConvert {
+    background: #075bd8;
+    color: #ffffff;
+}
+
+#downloadConvert {
+    background: #129447;
+    color: #ffffff;
+}
+
+#downloadConvert:disabled {
+    background: #aeb9c8;
+    cursor: not-allowed;
+}
+
+.convert-info {
+    margin: 8px 0 16px;
+    padding: 10px 12px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    color: #526174;
+}
+
+#convertCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 650px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 700px) {
+    .convert-controls {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ========================================
+   PHOTO SIZE IN KB TOOL
+======================================== */
+
+#kbSizeToolPanel {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    margin: 22px 0 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#kbSizeToolPanel[hidden] {
+    display: none;
+}
+
+.kb-size-controls {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 16px;
+}
+
+.kb-size-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-weight: 700;
+}
+
+.kb-size-controls select,
+.kb-size-controls input {
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid #cfd9e5;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+#generateKbSize,
+#downloadKbSize {
+    min-height: 46px;
+    border: 0;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#generateKbSize {
+    background: #075bd8;
+    color: #ffffff;
+}
+
+#downloadKbSize {
+    background: #129447;
+    color: #ffffff;
+}
+
+#downloadKbSize:disabled {
+    background: #aeb9c8;
+    cursor: not-allowed;
+}
+
+.kb-size-info {
+    margin: 8px 0 16px;
+    padding: 10px 12px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    color: #526174;
+}
+
+#kbSizeCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 650px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 700px) {
+    .kb-size-controls {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ========================================
+   BACKGROUND TOOL - UNIFIED WORKSPACE
+======================================== */
+
+#backgroundActionPanel {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+    margin: 22px 0 0;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #d7e0ea;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#backgroundActionPanel[hidden] {
+    display: none;
+}
+
+#backgroundActionPanel .background-color-options {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 18px 0 14px;
+}
+
+#backgroundActionPanel #downloadBackgroundImage {
+    width: 100%;
+    min-height: 46px;
+    margin-top: 4px;
+}
+
+@media (max-width: 700px) {
+    #backgroundActionPanel .background-color-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ========================================
+   FINAL PHOTO ACTION FULL WIDTH FIX
+======================================== */
+
+/*
+ background-tool-panel desktop पर 2-column grid है:
+ upload controls | preview
+
+ Tool cards और सभी processing panels को
+ दोनों columns की पूरी width लेनी चाहिए.
+*/
+
+.background-tool-panel > #photoActionPanel {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: none !important;
+
+    margin: 22px 0 0 !important;
+    padding: 22px 0 0 !important;
+
+    border: 0 !important;
+    border-top: 1px solid #d7e0ea !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+}
+
+.background-tool-panel > #photoActionPanel .photo-action-grid {
+    width: 100% !important;
+
+    display: grid !important;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr)) !important;
+
+    gap: 12px !important;
+}
+
+.background-tool-panel > #photoActionPanel .photo-action-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+
+/* All selected processing tools full width */
+
+.background-tool-panel > .photo-processing-panel,
+.background-tool-panel > #backgroundActionPanel {
+    grid-column: 1 / -1 !important;
+
+    width: 100% !important;
+    max-width: none !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* Tablet */
+
+@media (max-width: 800px) {
+
+    .background-tool-panel > #photoActionPanel
+    .photo-action-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+
+/* Mobile */
+
+@media (max-width: 520px) {
+
+    .background-tool-panel > #photoActionPanel
+    .photo-action-grid {
+
+        grid-template-columns:
+            1fr !important;
+    }
+}
+
+
+/* ========================================
+   WHITE BACKGROUND RESULT PREVIEW
+======================================== */
+
+#backgroundResultPreview {
+    width: 100%;
+    min-height: 300px;
+    margin: 18px 0 14px;
+    padding: 20px;
+    border: 2px dashed #b6c4d5;
+    border-radius: 12px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            45deg,
+            #f4f6f8 25%,
+            transparent 25%
+        ),
+        linear-gradient(
+            -45deg,
+            #f4f6f8 25%,
+            transparent 25%
+        ),
+        linear-gradient(
+            45deg,
+            transparent 75%,
+            #f4f6f8 75%
+        ),
+        linear-gradient(
+            -45deg,
+            transparent 75%,
+            #f4f6f8 75%
+        );
+
+    background-size: 20px 20px;
+    background-position:
+        0 0,
+        0 10px,
+        10px -10px,
+        -10px 0;
+}
+
+#backgroundResultPreview img {
+    max-width: 100%;
+    max-height: 600px;
+    object-fit: contain;
+    background: #ffffff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.background-result-placeholder {
+    color: #64748b;
+}
+
