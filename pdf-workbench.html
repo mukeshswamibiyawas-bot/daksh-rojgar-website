@@ -1,0 +1,1045 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PDF Tools | Daksh Rojgar</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"
+    ></script>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+    ></script>
+
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="top-brand-bar">
+
+        <div class="top-side-text">
+            Online PDF Utility
+        </div>
+
+        <div class="brand-center">
+            <div class="main-brand">
+                DAKSH ◈ ROJGAR
+            </div>
+
+            <div class="brand-subtitle">
+                PDF Tools
+            </div>
+        </div>
+
+        <div class="top-side-text">
+            Free Online Tool
+        </div>
+
+    </div>
+
+    <nav class="main-navigation">
+
+        <button
+            id="menuBtn"
+            type="button"
+            aria-label="Open menu"
+        >
+            ☰
+        </button>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="photo-tools.html">
+            Photo Tools
+        </a>
+
+        <a
+            href="pdf-tools.html"
+            class="active"
+        >
+            PDF Tools
+        </a>
+
+    </nav>
+
+</header>
+
+
+<main class="wrap">
+
+    <section class="listing-hero">
+
+        <span class="listing-label">
+            PDF UTILITY TOOL
+        </span>
+
+        <h1>PDF Tools</h1>
+
+        <p>
+            Select a PDF utility and process files directly
+            in your browser.
+        </p>
+
+    </section>
+
+
+    <section class="background-tool-panel pdf-workbench-shell">
+
+        <div class="background-tool-controls">
+
+            <label
+                for="pdfMainInput"
+                class="background-upload-label"
+            >
+                Select File
+            </label>
+
+            <input
+                id="pdfMainInput"
+                type="file"
+                accept="application/pdf,image/jpeg,image/png"
+                multiple
+            >
+
+            <p id="pdfStatus">
+                Select file(s) to begin.
+            </p>
+
+        </div>
+
+
+        <div class="background-preview-area">
+
+            <div
+                id="pdfMainPreview"
+                class="background-preview-box pdf-preview-box"
+            >
+                <span>
+                    File preview will appear here
+                </span>
+            </div>
+
+        </div>
+
+
+        <section
+            id="pdfActionPanel"
+            class="photo-action-panel"
+        >
+
+            <div class="photo-action-heading">
+
+                <h2>
+                    What do you want to do?
+                </h2>
+
+                <p>
+                    Select any PDF tool below.
+                </p>
+
+            </div>
+
+
+            <div class="photo-action-grid">
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-pdf-action="merge"
+                >
+                    <span>🔗</span>
+                    <strong>Merge PDF</strong>
+                    <small>Combine multiple PDFs</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-pdf-action="split"
+                >
+                    <span>✂️</span>
+                    <strong>Split PDF</strong>
+                    <small>Extract selected pages</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-pdf-action="resize-kb"
+                >
+                    <span>⚙️</span>
+                    <strong>Resize PDF in KB</strong>
+                    <small>Prepare PDF under required KB</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-pdf-action="image-to-pdf"
+                >
+                    <span>🖼️</span>
+                    <strong>Images to PDF</strong>
+                    <small>Create PDF from JPG / PNG</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-pdf-action="pdf-to-image"
+                >
+                    <span>📄</span>
+                    <strong>PDF to Images</strong>
+                    <small>Convert pages to images</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-pdf-action="remove-pages"
+                >
+                    <span>🗑️</span>
+                    <strong>Remove Pages</strong>
+                    <small>Delete unwanted pages</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-pdf-action="rotate"
+                >
+                    <span>🔄</span>
+                    <strong>Rotate Pages</strong>
+                    <small>Rotate PDF pages</small>
+                </button>
+
+                <button
+                    type="button"
+                    class="photo-action-card"
+                    data-pdf-action="reorder"
+                >
+                    <span>↕️</span>
+                    <strong>Reorder Pages</strong>
+                    <small>Change page sequence</small>
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <section
+            id="mergePdfPanel"
+            class="photo-processing-panel"
+            hidden
+        >
+
+            <div class="photo-processing-heading">
+                <h2>Merge PDF</h2>
+
+                <p>
+                    Select multiple PDF files, arrange their order
+                    and combine them into one PDF.
+                </p>
+            </div>
+
+
+            <div class="merge-pdf-toolbar">
+
+                <button
+                    id="addMorePdfButton"
+                    type="button"
+                >
+                    + Add More PDFs
+                </button>
+
+                <button
+                    id="sortPdfButton"
+                    type="button"
+                >
+                    A↕Z Sort
+                </button>
+
+            </div>
+
+
+            <div
+                id="mergePdfInfo"
+                class="tool-info"
+            >
+                No PDF files selected.
+            </div>
+
+
+            <div
+                id="mergePdfCards"
+                class="merge-pdf-cards"
+            ></div>
+
+
+            <div class="passport-controls">
+
+                <button
+                    id="generateMergePdf"
+                    type="button"
+                >
+                    Merge PDF
+                </button>
+
+                <button
+                    id="downloadMergePdf"
+                    type="button"
+                    disabled
+                >
+                    Download Merged PDF
+                </button>
+
+            </div>
+
+        </section>
+
+
+        
+        <!-- ========================================
+             SPLIT PDF PANEL
+        ========================================= -->
+
+        <section
+            id="splitPdfPanel"
+            class="photo-processing-panel"
+            hidden
+        >
+
+            <div class="photo-processing-heading">
+                <h2>Split PDF</h2>
+
+                <p>
+                    Select the pages you want to extract
+                    and create a new PDF.
+                </p>
+            </div>
+
+            <div class="pdf-split-toolbar">
+
+                <button
+                    id="selectAllSplitPages"
+                    type="button"
+                >
+                    Select All
+                </button>
+
+                <button
+                    id="clearSplitPages"
+                    type="button"
+                >
+                    Clear Selection
+                </button>
+
+            </div>
+
+            <p id="splitPdfInfo">
+                Select a PDF file to view its pages.
+            </p>
+
+            <div
+                id="splitPdfPreview"
+                class="pdf-page-preview-grid"
+            ></div>
+
+            <div class="pdf-split-actions">
+
+                <button
+                    id="generateSplitPdf"
+                    type="button"
+                    disabled
+                >
+                    Extract Selected Pages
+                </button>
+
+                <button
+                    id="downloadSplitPdf"
+                    type="button"
+                    disabled
+                >
+                    Download Split PDF
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================
+             RESIZE PDF IN KB
+        ====================================== -->
+
+        <section
+            id="resizePdfKbPanel"
+            class="photo-processing-panel"
+            hidden
+        >
+
+            <div class="photo-processing-heading">
+
+                <h2>
+                    Resize PDF in KB
+                </h2>
+
+                <p>
+                    Reduce PDF file size close to the
+                    required KB limit.
+                </p>
+
+            </div>
+
+
+            <div class="pdf-resize-info-row">
+
+                <div class="pdf-resize-original">
+
+                    <strong>
+                        Original PDF
+                    </strong>
+
+                    <span id="resizePdfOriginalSize">
+                        Select a PDF file.
+                    </span>
+
+                </div>
+
+                <div class="pdf-resize-target">
+
+                    <strong>
+                        Target Size
+                    </strong>
+
+                    <span id="resizePdfTargetDisplay">
+                        100 KB
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="pdf-resize-controls">
+
+                <label>
+                    Target Size
+
+                    <select id="resizePdfTarget">
+
+                        <option value="50">
+                            50 KB
+                        </option>
+
+                        <option
+                            value="100"
+                            selected
+                        >
+                            100 KB
+                        </option>
+
+                        <option value="200">
+                            200 KB
+                        </option>
+
+                        <option value="300">
+                            300 KB
+                        </option>
+
+                        <option value="500">
+                            500 KB
+                        </option>
+
+                        <option value="custom">
+                            Custom KB
+                        </option>
+
+                    </select>
+
+                </label>
+
+
+                <label>
+                    Custom KB
+
+                    <input
+                        id="resizePdfCustomKb"
+                        type="number"
+                        min="20"
+                        max="20000"
+                        step="1"
+                        placeholder="Enter KB"
+                        disabled
+                    >
+
+                </label>
+
+
+                <label>
+                    Quality
+
+                    <select id="resizePdfQuality">
+
+                        <option value="high">
+                            High Quality
+                        </option>
+
+                        <option
+                            value="balanced"
+                            selected
+                        >
+                            Balanced
+                        </option>
+
+                        <option value="small">
+                            Smaller File
+                        </option>
+
+                    </select>
+
+                </label>
+
+            </div>
+
+
+            <div
+                id="resizePdfProgress"
+                class="pdf-resize-progress"
+                hidden
+            >
+
+                <div class="pdf-resize-progress-track">
+
+                    <div
+                        id="resizePdfProgressBar"
+                        class="pdf-resize-progress-bar"
+                    ></div>
+
+                </div>
+
+                <span id="resizePdfProgressText">
+                    Processing PDF...
+                </span>
+
+            </div>
+
+
+            <div
+                id="resizePdfInfo"
+                class="pdf-tool-info"
+            >
+                Select a PDF to begin.
+            </div>
+
+
+            <div class="pdf-resize-actions">
+
+                <button
+                    id="generateResizePdf"
+                    type="button"
+                    disabled
+                >
+                    Resize PDF
+                </button>
+
+                <button
+                    id="downloadResizePdf"
+                    type="button"
+                    disabled
+                >
+                    Download PDF
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             PDF TO IMAGES
+        ====================================== -->
+
+        <section
+            id="pdfToImagesPanel"
+            class="photo-processing-panel"
+            hidden
+        >
+
+            <div class="photo-processing-heading">
+
+                <h2>PDF to Images</h2>
+
+                <p>
+                    Convert PDF pages into JPG or PNG images.
+                </p>
+
+            </div>
+
+
+            <div class="pdf-to-images-controls">
+
+                <label>
+                    Output Format
+
+                    <select id="pdfToImagesFormat">
+                        <option value="jpeg">
+                            JPG / JPEG
+                        </option>
+
+                        <option value="png">
+                            PNG
+                        </option>
+                    </select>
+                </label>
+
+
+                <label>
+                    Image Quality
+
+                    <select id="pdfToImagesQuality">
+                        <option value="1.5">
+                            Standard
+                        </option>
+
+                        <option
+                            value="2"
+                            selected
+                        >
+                            High Quality
+                        </option>
+
+                        <option value="2.5">
+                            Very High Quality
+                        </option>
+                    </select>
+                </label>
+
+            </div>
+
+
+            <div
+                id="pdfToImagesInfo"
+                class="pdf-tool-info"
+            >
+                Select a PDF file to begin.
+            </div>
+
+
+            <div class="pdf-to-images-actions">
+
+                <button
+                    id="generatePdfImages"
+                    type="button"
+                    disabled
+                >
+                    Convert All Pages
+                </button>
+
+                <button
+                    id="downloadAllPdfImages"
+                    type="button"
+                    disabled
+                >
+                    Download All Images
+                </button>
+
+            </div>
+
+
+            <div
+                id="pdfToImagesOutput"
+                class="pdf-to-images-output"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             REMOVE PDF PAGES
+        ====================================== -->
+
+        <section
+            id="removePagesPanel"
+            class="photo-processing-panel"
+            hidden
+        >
+
+            <div class="photo-processing-heading">
+
+                <h2>Remove Pages</h2>
+
+                <p>
+                    Select the pages you want to remove
+                    from the PDF.
+                </p>
+
+            </div>
+
+
+            <div class="pdf-remove-toolbar">
+
+                <button
+                    id="selectAllRemovePages"
+                    type="button"
+                >
+                    Select All
+                </button>
+
+                <button
+                    id="clearRemovePages"
+                    type="button"
+                >
+                    Clear Selection
+                </button>
+
+            </div>
+
+
+            <div
+                id="removePagesInfo"
+                class="pdf-tool-info"
+            >
+                Select a PDF file to begin.
+            </div>
+
+
+            <div class="pdf-remove-actions">
+
+                <button
+                    id="generateRemovePages"
+                    type="button"
+                    disabled
+                >
+                    Remove Selected Pages
+                </button>
+
+                <button
+                    id="downloadRemovePages"
+                    type="button"
+                    disabled
+                >
+                    Download PDF
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             ROTATE PDF PAGES
+        ====================================== -->
+
+        <section
+            id="rotatePagesPanel"
+            class="photo-processing-panel"
+            hidden
+        >
+
+            <div class="photo-processing-heading">
+
+                <h2>Rotate Pages</h2>
+
+                <p>
+                    Select PDF pages and rotate them
+                    without changing original quality.
+                </p>
+
+            </div>
+
+
+            <div class="pdf-rotate-toolbar">
+
+                <button
+                    id="selectAllRotatePages"
+                    type="button"
+                >
+                    Select All
+                </button>
+
+                <button
+                    id="clearRotatePages"
+                    type="button"
+                >
+                    Clear Selection
+                </button>
+
+            </div>
+
+
+            <div
+                id="rotatePagesInfo"
+                class="pdf-tool-info"
+            >
+                Select a PDF file to begin.
+            </div>
+
+
+            <div class="pdf-rotate-controls">
+
+                <button
+                    id="rotatePagesLeft"
+                    type="button"
+                    disabled
+                >
+                    ↶ Rotate Left 90°
+                </button>
+
+                <button
+                    id="rotatePagesRight"
+                    type="button"
+                    disabled
+                >
+                    ↷ Rotate Right 90°
+                </button>
+
+                <button
+                    id="rotatePages180"
+                    type="button"
+                    disabled
+                >
+                    ↕ Rotate 180°
+                </button>
+
+            </div>
+
+
+            <div class="pdf-rotate-actions">
+
+                <button
+                    id="generateRotatedPdf"
+                    type="button"
+                    disabled
+                >
+                    Apply Rotation
+                </button>
+
+                <button
+                    id="downloadRotatedPdf"
+                    type="button"
+                    disabled
+                >
+                    Download PDF
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             REORDER PDF PAGES
+        ====================================== -->
+
+        <section
+            id="reorderPagesPanel"
+            class="photo-processing-panel"
+            hidden
+        >
+
+            <div class="photo-processing-heading">
+
+                <h2>Reorder Pages</h2>
+
+                <p>
+                    Drag and drop pages to change
+                    their order in the PDF.
+                </p>
+
+            </div>
+
+
+            <div
+                id="reorderPagesInfo"
+                class="pdf-tool-info"
+            >
+                Select a PDF file to begin.
+            </div>
+
+
+            <div class="pdf-reorder-actions">
+
+                <button
+                    id="resetReorderPages"
+                    type="button"
+                    disabled
+                >
+                    Reset Order
+                </button>
+
+                <button
+                    id="generateReorderedPdf"
+                    type="button"
+                    disabled
+                >
+                    Apply New Order
+                </button>
+
+                <button
+                    id="downloadReorderedPdf"
+                    type="button"
+                    disabled
+                >
+                    Download PDF
+                </button>
+
+            </div>
+
+        </section>
+
+
+<section
+            id="imageToPdfPanel"
+            class="photo-processing-panel"
+            hidden
+        >
+
+            <div class="photo-processing-heading">
+
+                <h2>Images to PDF</h2>
+
+                <p>
+                    Select multiple JPG or PNG images
+                    and create one PDF.
+                </p>
+
+            </div>
+
+
+            <div class="passport-controls">
+
+                
+
+
+                <label>
+                    Page Size
+
+                    <select id="imageToPdfPageSize">
+                        <option value="a4">
+                            A4
+                        </option>
+
+                        <option value="image">
+                            Same as Image
+                        </option>
+                    </select>
+                </label>
+
+
+                <label>
+                    Image Fit
+
+                    <select id="imageToPdfFit">
+                        <option value="contain">
+                            Fit Full Image
+                        </option>
+
+                        <option value="fill">
+                            Fill Page
+                        </option>
+                    </select>
+                </label>
+
+
+                <button
+                    id="generateImagePdf"
+                    type="button"
+                >
+                    Create PDF
+                </button>
+
+
+                <button
+                    id="downloadImagePdf"
+                    type="button"
+                    disabled
+                >
+                    Download PDF
+                </button>
+
+            </div>
+
+
+            <div
+                id="imageToPdfInfo"
+                class="tool-info"
+            >
+                No images selected.
+            </div>
+
+
+            <div
+                id="imageToPdfList"
+                class="pdf-file-list"
+            ></div>
+
+        </section>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <div class="foot">
+
+        <div>
+            <h3>Daksh Rojgar</h3>
+
+            <p>
+                Government Jobs, Admit Cards, Results
+                and useful online tools.
+            </p>
+        </div>
+
+        <div>
+            <h4>Quick Links</h4>
+
+            <a href="index.html">Home</a>
+            <a href="photo-tools.html">Photo Tools</a>
+            <a href="pdf-tools.html">PDF Tools</a>
+        </div>
+
+        <div>
+            <h4>Legal</h4>
+
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms.html">Terms</a>
+            <a href="disclaimer.html">Disclaimer</a>
+        </div>
+
+    </div>
+
+    <div class="copy">
+        © <span id="year">2026</span> Daksh Rojgar
+    </div>
+
+</footer>
+
+
+<script src="pdf-workbench.js"></script>
+
+</body>
+</html>
+
+

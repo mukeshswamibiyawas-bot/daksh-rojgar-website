@@ -134,6 +134,89 @@ function getItemDestination(item) {
     };
 }
 
+
+/* =================================
+   Fast Website Content Cache
+================================= */
+
+const DAKSH_HOME_CACHE_KEY = "daksh_home_content_v1";
+const DAKSH_HOME_CACHE_MAX_AGE = 30 * 60 * 1000;
+
+function getHomeContentCache() {
+    try {
+        const raw =
+            localStorage.getItem(
+                DAKSH_HOME_CACHE_KEY
+            );
+
+        if (!raw) {
+            return null;
+        }
+
+        const parsed = JSON.parse(raw);
+
+        if (
+            !parsed ||
+            !Array.isArray(parsed.data)
+        ) {
+            return null;
+        }
+
+        return parsed.data;
+    } catch (error) {
+        console.warn(
+            "[Daksh Website] Cache read failed:",
+            error
+        );
+
+        return null;
+    }
+}
+
+function saveHomeContentCache(data) {
+    try {
+        localStorage.setItem(
+            DAKSH_HOME_CACHE_KEY,
+            JSON.stringify({
+                data,
+                savedAt: Date.now(),
+            })
+        );
+    } catch (error) {
+        console.warn(
+            "[Daksh Website] Cache save failed:",
+            error
+        );
+    }
+}
+
+function isHomeContentCacheFresh() {
+    try {
+        const raw =
+            localStorage.getItem(
+                DAKSH_HOME_CACHE_KEY
+            );
+
+        if (!raw) {
+            return false;
+        }
+
+        const parsed = JSON.parse(raw);
+
+        if (!parsed?.savedAt) {
+            return false;
+        }
+
+        return (
+            Date.now() - parsed.savedAt <
+            DAKSH_HOME_CACHE_MAX_AGE
+        );
+    } catch {
+        return false;
+    }
+}
+
+
 /* =================================
    Fetch Jobs and Posts
 ================================= */
@@ -204,7 +287,7 @@ async function fetchLiveContent() {
               )
             : [];
 
-    return [
+    const combinedContent = [
         ...jobs,
         ...posts,
     ].sort(
@@ -215,6 +298,12 @@ async function fetchLiveContent() {
             getItemDate(secondItem) -
             getItemDate(firstItem)
     );
+
+    saveHomeContentCache(
+        combinedContent
+    );
+
+    return combinedContent;
 }
 
 /* =================================
@@ -431,20 +520,43 @@ if (
 ================================= */
 
 async function initializeWebsite() {
-    try {
-        console.log(
-            "[Daksh Website] Loading live updates..."
-        );
+    const cachedContent =
+        getHomeContentCache();
 
+    // Show saved content immediately when available.
+    if (
+        Array.isArray(cachedContent) &&
+        cachedContent.length
+    ) {
         allLiveItems =
-            await fetchLiveContent();
-
-        console.log(
-            `[Daksh Website] ${allLiveItems.length} live items loaded`
-        );
+            cachedContent;
 
         renderLatestUpdates(
             allLiveItems
+        );
+
+        console.log(
+            `[Daksh Website] ${allLiveItems.length} cached items shown instantly`
+        );
+    }
+
+    try {
+        console.log(
+            "[Daksh Website] Refreshing live updates..."
+        );
+
+        const freshContent =
+            await fetchLiveContent();
+
+        allLiveItems =
+            freshContent;
+
+        renderLatestUpdates(
+            allLiveItems
+        );
+
+        console.log(
+            `[Daksh Website] ${allLiveItems.length} fresh items loaded`
         );
     } catch (error) {
         console.error(
@@ -452,11 +564,22 @@ async function initializeWebsite() {
             error
         );
 
+        // Keep cached content visible if live API fails.
+        if (
+            Array.isArray(cachedContent) &&
+            cachedContent.length
+        ) {
+            console.log(
+                "[Daksh Website] Keeping cached content visible"
+            );
+
+            return;
+        }
+
         /*
-         * API fail होने पर index.html में मौजूद
-         * static ticker दिखाई देती रहेगी।
+         * No cache + API failure:
+         * keep the static ticker already present in index.html.
          */
     }
 }
-
 initializeWebsite();

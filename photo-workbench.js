@@ -3791,3 +3791,64 @@ if (
 
 
 
+
+// ========================================
+// PHOTO TOOL URL ROUTING
+// ========================================
+
+(function openPhotoToolFromUrl() {
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const requestedTool =
+        (params.get("tool") || "").trim().toLowerCase();
+
+    if (!requestedTool) {
+        return;
+    }
+
+    const toolMap = {
+        "background": "background",
+        "passport": "passport",
+        "4x6": "four-by-six",
+        "four-by-six": "four-by-six",
+        "name-add": "name-add",
+        "resize": "resize",
+        "compress": "compress",
+        "crop": "crop",
+        "convert": "convert",
+        "kb": "kb-size",
+        "kb-size": "kb-size"
+    };
+
+    const action = toolMap[requestedTool];
+
+    if (!action) {
+        return;
+    }
+
+    const button = Array.from(
+        document.querySelectorAll("[data-action]")
+    ).find(
+        item => item.dataset.action === action
+    );
+
+    if (!button) {
+        console.warn(
+            "[Daksh Photo Tools] Tool button not found:",
+            action
+        );
+        return;
+    }
+
+    button.click();
+
+    setTimeout(() => {
+        button.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
+    }, 100);
+
+})();

@@ -94,6 +94,69 @@ const MODULE_CONFIG = {
     },
 };
 
+
+/* =================================
+   Fast Listing Cache
+================================= */
+
+const DAKSH_LISTING_CACHE_PREFIX =
+    "daksh_listing_cache_v1:";
+
+function getListingCache(moduleName) {
+    try {
+        const raw =
+            localStorage.getItem(
+                DAKSH_LISTING_CACHE_PREFIX +
+                moduleName
+            );
+
+        if (!raw) {
+            return null;
+        }
+
+        const parsed =
+            JSON.parse(raw);
+
+        if (
+            !parsed ||
+            !Array.isArray(parsed.data)
+        ) {
+            return null;
+        }
+
+        return parsed.data;
+    } catch (error) {
+        console.warn(
+            "[Daksh Website] Listing cache read failed:",
+            error
+        );
+
+        return null;
+    }
+}
+
+function saveListingCache(
+    moduleName,
+    items
+) {
+    try {
+        localStorage.setItem(
+            DAKSH_LISTING_CACHE_PREFIX +
+            moduleName,
+            JSON.stringify({
+                data: items,
+                savedAt: Date.now(),
+            })
+        );
+    } catch (error) {
+        console.warn(
+            "[Daksh Website] Listing cache save failed:",
+            error
+        );
+    }
+}
+
+
 function escapeHtml(value) {
     return String(value ?? "")
         .replace(/&/g, "&amp;")
@@ -277,6 +340,8 @@ function showLoadError(error) {
 }
 
 async function loadListing() {
+    let cachedItems = null;
+
     try {
         if (
             !listingContainer ||
@@ -284,39 +349,81 @@ async function loadListing() {
             !listingLabel ||
             !listingDescription
         ) {
-            throw new Error("Required listing page elements are missing");
+            throw new Error(
+                "Required listing page elements are missing"
+            );
         }
 
-        const params = new URLSearchParams(window.location.search);
-        const moduleName = params.get("module") || "all_posts";
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const moduleName =
+            params.get("module") ||
+            "all_posts";
 
         const config =
             MODULE_CONFIG[moduleName] ||
             MODULE_CONFIG.all_posts;
 
-        listingTitle.textContent = config.title;
-        listingLabel.textContent = config.label;
-        listingDescription.textContent = config.description;
-        document.title = `${config.title} | Daksh Rojgar`;
+        listingTitle.textContent =
+            config.title;
 
-        const requestUrl = `${API_BASE_URL}${config.endpoint}`;
+        listingLabel.textContent =
+            config.label;
 
-        console.log("[Daksh Website] Listing request:", requestUrl);
+        listingDescription.textContent =
+            config.description;
 
-        const response = await fetch(requestUrl, {
-            method: "GET",
-            mode: "cors",
-            cache: "no-store",
-            headers: {
-                Accept: "application/json",
-            },
-        });
+        document.title =
+            `${config.title} | Daksh Rojgar`;
+
+        /*
+         * Show cached listing immediately.
+         */
+        cachedItems =
+            getListingCache(
+                moduleName
+            );
+
+        if (
+            Array.isArray(cachedItems)
+        ) {
+            renderItems(
+                cachedItems,
+                config.type
+            );
+
+            console.log(
+                `[Daksh Website] ${moduleName}: ${cachedItems.length} cached items shown instantly`
+            );
+        }
+
+        /*
+         * Refresh from backend in background.
+         */
+        const requestUrl =
+            `${API_BASE_URL}${config.endpoint}`;
 
         console.log(
-            "[Daksh Website] Listing response:",
-            response.status,
-            response.statusText
+            "[Daksh Website] Listing refresh:",
+            requestUrl
         );
+
+        const response =
+            await fetch(
+                requestUrl,
+                {
+                    method: "GET",
+                    mode: "cors",
+                    cache: "default",
+                    headers: {
+                        Accept:
+                            "application/json",
+                    },
+                }
+            );
 
         if (!response.ok) {
             throw new Error(
@@ -324,19 +431,53 @@ async function loadListing() {
             );
         }
 
-        const items = await response.json();
+        const items =
+            await response.json();
 
-        console.log(
-            "[Daksh Website] Listing items loaded:",
-            Array.isArray(items) ? items.length : items
+        if (!Array.isArray(items)) {
+            throw new Error(
+                "API response is not an array"
+            );
+        }
+
+        saveListingCache(
+            moduleName,
+            items
         );
 
-        renderItems(items, config.type);
+        renderItems(
+            items,
+            config.type
+        );
+
+        console.log(
+            `[Daksh Website] ${moduleName}: ${items.length} fresh items loaded`
+        );
+
     } catch (error) {
+
+        console.error(
+            "[Daksh Website] Listing failed:",
+            error
+        );
+
+        /*
+         * If cache is already visible,
+         * do not replace it with an error.
+         */
+        if (
+            Array.isArray(cachedItems)
+        ) {
+            console.log(
+                "[Daksh Website] Keeping cached listing visible"
+            );
+
+            return;
+        }
+
         showLoadError(error);
     }
 }
-
 loadListing();
 
 

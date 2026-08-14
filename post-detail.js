@@ -1,7 +1,7 @@
-﻿"use strict";
+"use strict";
 
 const API_BASE_URL =
-    "https://daksh-rojgar-api.onrender.com";
+"https://daksh-rojgar-api.onrender.com";
 
 const postDetail =
     document.getElementById("postDetail");
@@ -326,3 +326,5 @@ async function loadPost() {
 }
 
 loadPost();
+
+
