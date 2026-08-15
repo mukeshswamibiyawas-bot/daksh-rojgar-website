@@ -2,6 +2,9 @@
 
 const API_BASE_URL = "https://daksh-rojgar-api.onrender.com";
 
+const PUBLIC_SITE_URL =
+    "https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website";
+
 const listingContainer = document.getElementById("listingContainer");
 const listingTitle = document.getElementById("listingTitle");
 const listingLabel = document.getElementById("listingLabel");
@@ -17,6 +20,8 @@ const MODULE_CONFIG = {
         title: "Government Jobs",
         label: "LATEST RECRUITMENTS",
         description: "Latest Rajasthan, Central and Private job updates.",
+        seoTitle: "Latest Government Jobs 2026 | Daksh Rojgar",
+        seoDescription: "Check latest government jobs, Rajasthan jobs, central government vacancies, recruitment updates, eligibility and application details on Daksh Rojgar.",
         endpoint: "/api/jobs",
         type: "job",
     },
@@ -25,6 +30,8 @@ const MODULE_CONFIG = {
         title: "Admit Cards",
         label: "LATEST ADMIT CARDS",
         description: "Download the latest examination admit cards.",
+        seoTitle: "Latest Admit Cards 2026 | Daksh Rojgar",
+        seoDescription: "Download latest admit cards, exam hall tickets and recruitment examination updates from Daksh Rojgar.",
         endpoint: "/api/posts?category=admit_card",
         type: "post",
     },
@@ -33,6 +40,8 @@ const MODULE_CONFIG = {
         title: "Exam Results",
         label: "LATEST RESULTS",
         description: "Check the latest recruitment and examination results.",
+        seoTitle: "Latest Exam Results 2026 | Daksh Rojgar",
+        seoDescription: "Check latest government job results, recruitment results, exam results and merit list updates on Daksh Rojgar.",
         endpoint: "/api/posts?category=result",
         type: "post",
     },
@@ -41,6 +50,8 @@ const MODULE_CONFIG = {
         title: "Answer Keys",
         label: "LATEST ANSWER KEYS",
         description: "Latest provisional and final answer keys.",
+        seoTitle: "Latest Answer Keys 2026 | Daksh Rojgar",
+        seoDescription: "Check latest provisional and final answer keys for government recruitment and competitive examinations on Daksh Rojgar.",
         endpoint: "/api/posts?category=answer_key",
         type: "post",
     },
@@ -49,6 +60,8 @@ const MODULE_CONFIG = {
         title: "Syllabus",
         label: "LATEST SYLLABUS",
         description: "Exam syllabus and preparation-related updates.",
+        seoTitle: "Latest Exam Syllabus & Study Updates | Daksh Rojgar",
+        seoDescription: "Find latest government exam syllabus, recruitment syllabus and useful study updates on Daksh Rojgar.",
         endpoint: "/api/posts?category=syllabus",
         type: "post",
     },
@@ -57,6 +70,8 @@ const MODULE_CONFIG = {
         title: "Current Affairs",
         label: "DAILY CURRENT AFFAIRS",
         description: "Current affairs and useful study updates.",
+        seoTitle: "Daily Current Affairs 2026 | Daksh Rojgar",
+        seoDescription: "Read daily current affairs, Rajasthan current affairs and useful competitive exam updates on Daksh Rojgar.",
         endpoint: "/api/posts?category=current_affairs",
         type: "post",
     },
@@ -65,6 +80,8 @@ const MODULE_CONFIG = {
         title: "Government Schemes",
         label: "LATEST GOVERNMENT SCHEMES",
         description: "Central and State Government scheme information.",
+        seoTitle: "Government Schemes & Yojana Updates | Daksh Rojgar",
+        seoDescription: "Find latest Rajasthan and Central Government schemes, yojana information, eligibility and important updates on Daksh Rojgar.",
         endpoint: "/api/posts?category=yojana",
         type: "post",
     },
@@ -73,6 +90,8 @@ const MODULE_CONFIG = {
         title: "Rajasthan Information",
         label: "RAJASTHAN UPDATES",
         description: "Important Rajasthan information and updates.",
+        seoTitle: "Rajasthan Information & Latest Updates | Daksh Rojgar",
+        seoDescription: "Read important Rajasthan information, government updates and useful state-level information on Daksh Rojgar.",
         endpoint: "/api/posts?category=rajasthan_info",
         type: "post",
     },
@@ -81,6 +100,8 @@ const MODULE_CONFIG = {
         title: "eMitra Updates",
         label: "LATEST EMITRA INFORMATION",
         description: "Important eMitra services and update information.",
+        seoTitle: "eMitra Updates & Services | Daksh Rojgar",
+        seoDescription: "Get latest Rajasthan eMitra service updates, useful information and important eMitra notices on Daksh Rojgar.",
         endpoint: "/api/posts?category=emitra",
         type: "post",
     },
@@ -89,6 +110,8 @@ const MODULE_CONFIG = {
         title: "All Updates",
         label: "LATEST POSTS",
         description: "All recent posts published through Daksh Rojgar.",
+        seoTitle: "Latest Updates | Daksh Rojgar",
+        seoDescription: "See all latest jobs, admit cards, results, current affairs, schemes and other updates published on Daksh Rojgar.",
         endpoint: "/api/posts",
         type: "post",
     },
@@ -359,13 +382,17 @@ async function loadListing() {
                 window.location.search
             );
 
-        const moduleName =
+        const requestedModule =
             params.get("module") ||
             "all_posts";
 
+        const moduleName =
+            MODULE_CONFIG[requestedModule]
+                ? requestedModule
+                : "all_posts";
+
         const config =
-            MODULE_CONFIG[moduleName] ||
-            MODULE_CONFIG.all_posts;
+            MODULE_CONFIG[moduleName];
 
         listingTitle.textContent =
             config.title;
@@ -377,7 +404,33 @@ async function loadListing() {
             config.description;
 
         document.title =
+            config.seoTitle ||
             `${config.title} | Daksh Rojgar`;
+
+        const pageDescription =
+            document.getElementById(
+                "pageDescription"
+            );
+
+        if (pageDescription) {
+            pageDescription.setAttribute(
+                "content",
+                config.seoDescription ||
+                config.description
+            );
+        }
+
+        const pageCanonical =
+            document.getElementById(
+                "pageCanonical"
+            );
+
+        if (pageCanonical) {
+            pageCanonical.setAttribute(
+                "href",
+                `${PUBLIC_SITE_URL}/listing.html?module=${encodeURIComponent(moduleName)}`
+            );
+        }
 
         /*
          * Show cached listing immediately.

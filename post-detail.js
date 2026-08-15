@@ -3,6 +3,9 @@
 const API_BASE_URL =
 "https://daksh-rojgar-api.onrender.com";
 
+const PUBLIC_SITE_URL =
+    "https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website";
+
 const postDetail =
     document.getElementById("postDetail");
 
@@ -311,6 +314,48 @@ async function loadPost() {
 
         const post =
             await response.json();
+
+        const seoTitle =
+            post.title_hi ||
+            post.title ||
+            "Latest Update";
+
+        document.title =
+            `${seoTitle} | Daksh Rojgar`;
+
+        const pageDescription =
+            document.getElementById(
+                "pageDescription"
+            );
+
+        if (pageDescription) {
+            const description =
+                post.short_summary_hi ||
+                post.short_summary ||
+                post.content_hi ||
+                post.content ||
+                "Latest update on Daksh Rojgar.";
+
+            pageDescription.setAttribute(
+                "content",
+                String(description)
+                    .replace(/\s+/g, " ")
+                    .trim()
+                    .slice(0, 160)
+            );
+        }
+
+        const pageCanonical =
+            document.getElementById(
+                "pageCanonical"
+            );
+
+        if (pageCanonical) {
+            pageCanonical.setAttribute(
+                "href",
+                `${PUBLIC_SITE_URL}/post.html?id=${encodeURIComponent(postId)}`
+            );
+        }
 
         renderPost(post);
     } catch (error) {

@@ -3,6 +3,9 @@
 const API_BASE_URL =
 "https://daksh-rojgar-api.onrender.com";
 
+const PUBLIC_SITE_URL =
+    "https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website";
+
 const jobDetail =
     document.getElementById("jobDetail");
 
@@ -374,6 +377,48 @@ async function loadJob() {
 
         const job =
             await response.json();
+
+        const seoTitle =
+            job.title_hi ||
+            job.title ||
+            "Government Job";
+
+        document.title =
+            `${seoTitle} | Daksh Rojgar`;
+
+        const pageDescription =
+            document.getElementById(
+                "pageDescription"
+            );
+
+        if (pageDescription) {
+            const description =
+                job.short_summary_hi ||
+                job.short_summary ||
+                job.description_hi ||
+                job.description ||
+                "Government job details on Daksh Rojgar.";
+
+            pageDescription.setAttribute(
+                "content",
+                String(description)
+                    .replace(/\s+/g, " ")
+                    .trim()
+                    .slice(0, 160)
+            );
+        }
+
+        const pageCanonical =
+            document.getElementById(
+                "pageCanonical"
+            );
+
+        if (pageCanonical) {
+            pageCanonical.setAttribute(
+                "href",
+                `${PUBLIC_SITE_URL}/job.html?id=${encodeURIComponent(jobId)}`
+            );
+        }
 
         renderJob(job);
     } catch (error) {
