@@ -1,0 +1,4 @@
+﻿User-agent: *
+Allow: /
+
+Sitemap: https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/sitemap.xml

@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/listing.html?module=jobs</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/listing.html?module=admit_card</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/listing.html?module=result</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/listing.html?module=current_affairs</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/listing.html?module=yojana</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/photo-tools.html</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/pdf-tools.html</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/contact.html</loc>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/privacy-policy.html</loc>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>
