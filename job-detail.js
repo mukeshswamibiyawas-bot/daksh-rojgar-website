@@ -3,9 +3,6 @@
 const API_BASE_URL =
 "https://daksh-rojgar-api.onrender.com";
 
-const PUBLIC_SITE_URL =
-    "https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website";
-
 const jobDetail =
     document.getElementById("jobDetail");
 
@@ -55,6 +52,47 @@ function textToParagraphs(value) {
         .join("");
 }
 
+function sanitizeRichHtml(value) {
+    const doc = new DOMParser().parseFromString(String(value || ""), "text/html");
+
+    doc.querySelectorAll("script, style, iframe, object, embed").forEach((el) => el.remove());
+
+    doc.querySelectorAll("*").forEach((el) => {
+        [...el.attributes].forEach((attr) => {
+            const name = attr.name.toLowerCase();
+            const val = String(attr.value || "").trim().toLowerCase();
+
+            if (name.startsWith("on")) {
+                el.removeAttribute(attr.name);
+            }
+
+            if ((name === "href" || name === "src") && val.startsWith("javascript:")) {
+                el.removeAttribute(attr.name);
+            }
+        });
+    });
+
+    return doc.body.innerHTML;
+}
+
+function richContentToHtml(value) {
+    if (!value) {
+        return "";
+    }
+
+    const text = String(value);
+    const looksLikeHtml = /<\/?[a-z][\s\S]*>/i.test(text);
+
+    if (looksLikeHtml) {
+        return sanitizeRichHtml(text);
+    }
+
+    return escapeHtml(text)
+        .split(/\r?\n/)
+        .filter((line) => line.trim())
+        .map((line) => `<p>${line}</p>`)
+        .join("");
+}
 function renderSection(title, content) {
     if (!content) {
         return "";
@@ -64,8 +102,8 @@ function renderSection(title, content) {
         <section class="detail-section">
             <h2>${escapeHtml(title)}</h2>
 
-            <div class="detail-text">
-                ${textToParagraphs(content)}
+            <div class="detail-text rich-content">
+                ${richContentToHtml(content)}
             </div>
         </section>
     `;
@@ -377,48 +415,6 @@ async function loadJob() {
 
         const job =
             await response.json();
-
-        const seoTitle =
-            job.title_hi ||
-            job.title ||
-            "Government Job";
-
-        document.title =
-            `${seoTitle} | Daksh Rojgar`;
-
-        const pageDescription =
-            document.getElementById(
-                "pageDescription"
-            );
-
-        if (pageDescription) {
-            const description =
-                job.short_summary_hi ||
-                job.short_summary ||
-                job.description_hi ||
-                job.description ||
-                "Government job details on Daksh Rojgar.";
-
-            pageDescription.setAttribute(
-                "content",
-                String(description)
-                    .replace(/\s+/g, " ")
-                    .trim()
-                    .slice(0, 160)
-            );
-        }
-
-        const pageCanonical =
-            document.getElementById(
-                "pageCanonical"
-            );
-
-        if (pageCanonical) {
-            pageCanonical.setAttribute(
-                "href",
-                `${PUBLIC_SITE_URL}/job.html?id=${encodeURIComponent(jobId)}`
-            );
-        }
 
         renderJob(job);
     } catch (error) {

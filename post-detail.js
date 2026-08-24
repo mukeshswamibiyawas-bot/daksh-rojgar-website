@@ -3,9 +3,6 @@
 const API_BASE_URL =
 "https://daksh-rojgar-api.onrender.com";
 
-const PUBLIC_SITE_URL =
-    "https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website";
-
 const postDetail =
     document.getElementById("postDetail");
 
@@ -55,6 +52,30 @@ function textToParagraphs(value) {
         .join("");
 }
 
+function sanitizeRichHtml(value) {
+    const doc = new DOMParser().parseFromString(String(value || ""), "text/html");
+    doc.querySelectorAll("script, style, iframe, object, embed").forEach((el) => el.remove());
+    doc.querySelectorAll("*").forEach((el) => {
+        [...el.attributes].forEach((attr) => {
+            const name = attr.name.toLowerCase();
+            const val = String(attr.value || "").trim().toLowerCase();
+            if (name.startsWith("on")) el.removeAttribute(attr.name);
+            if ((name === "href" || name === "src") && val.startsWith("javascript:")) el.removeAttribute(attr.name);
+        });
+    });
+    return doc.body.innerHTML;
+}
+
+function richContentToHtml(value) {
+    if (!value) return "";
+    const text = String(value);
+    if (/<\/?[a-z][\s\S]*>/i.test(text)) return sanitizeRichHtml(text);
+    return escapeHtml(text)
+        .split(/\r?\n/)
+        .filter((line) => line.trim())
+        .map((line) => `<p>${line}</p>`)
+        .join("");
+}
 function createLinkButton(
     label,
     url,
@@ -87,8 +108,8 @@ function renderSection(title, content) {
     return `
         <section class="detail-section">
             <h2>${escapeHtml(title)}</h2>
-            <div class="detail-text">
-                ${textToParagraphs(content)}
+            <div class="detail-text rich-content">
+                ${richContentToHtml(content)}
             </div>
         </section>
     `;
@@ -314,48 +335,6 @@ async function loadPost() {
 
         const post =
             await response.json();
-
-        const seoTitle =
-            post.title_hi ||
-            post.title ||
-            "Latest Update";
-
-        document.title =
-            `${seoTitle} | Daksh Rojgar`;
-
-        const pageDescription =
-            document.getElementById(
-                "pageDescription"
-            );
-
-        if (pageDescription) {
-            const description =
-                post.short_summary_hi ||
-                post.short_summary ||
-                post.content_hi ||
-                post.content ||
-                "Latest update on Daksh Rojgar.";
-
-            pageDescription.setAttribute(
-                "content",
-                String(description)
-                    .replace(/\s+/g, " ")
-                    .trim()
-                    .slice(0, 160)
-            );
-        }
-
-        const pageCanonical =
-            document.getElementById(
-                "pageCanonical"
-            );
-
-        if (pageCanonical) {
-            pageCanonical.setAttribute(
-                "href",
-                `${PUBLIC_SITE_URL}/post.html?id=${encodeURIComponent(postId)}`
-            );
-        }
 
         renderPost(post);
     } catch (error) {
