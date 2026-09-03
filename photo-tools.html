@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,48 +23,73 @@
 
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="home-redesign.css">
 </head>
 
-<body>
+<body class="home-v2 dr-tool-page">
 
-<header>
-    <div class="top">
 
-        <div class="date">
-            Online Photo Utilities
+
+<header class="dr-site-header">
+
+    <div class="dr-top-strip">
+        <div class="dr-header-width">
+            <span>Employment • Education • Exam Information</span>
+
+            <div>
+                <a href="privacy-policy.html">Privacy</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <a href="contact.html">Contact</a>
+            </div>
         </div>
+    </div>
 
-        <div class="brand">
-            <h1>DAKSH ◈ ROJGAR</h1>
-            <p>Photo Tools</p>
+    <div class="dr-brand-area">
+        <div class="dr-header-width dr-brand-wrap">
+
+            <a class="dr-brand" href="index.html">
+                <span class="dr-logo">DR</span>
+
+                <span>
+                    <strong>DAKSH ROJGAR</strong>
+                    <small>Employment News • Jobs • Exams • Results</small>
+                </span>
+            </a>
+
+            <div class="dr-brand-note">
+                <strong>Independent Information Platform</strong>
+                <span>
+                    Verify important information from the original official source.
+                </span>
+            </div>
+
         </div>
+    </div>
 
-        <div class="actions">
-            Free Online Tools
+    <div class="dr-menu-bar">
+
+        <div class="dr-header-width dr-menu-wrap">
+
+            <button
+                id="menuBtn"
+                class="dr-menu-button"
+                type="button"
+                aria-label="Open menu"
+            >
+                ☰
+            </button>
+
+            <nav id="mainNav" class="dr-main-nav">
+                <a href="index.html">Home</a><a href="listing.html?module=jobs">Latest Jobs</a><a href="listing.html?module=admit_card">Admit Cards</a><a href="listing.html?module=result">Results</a><a href="listing.html?module=answer_key">Answer Key</a><a href="listing.html?module=syllabus">Syllabus</a><a href="listing.html?module=current_affairs">Current Affairs</a><a href="listing.html?module=yojana">Schemes &amp; Yojana</a><a class="active" href="photo-tools.html">Photo Tools</a><a href="pdf-tools.html">PDF Tools</a>
+            </nav>
+
         </div>
 
     </div>
 
-    <div class="nav">
-
-        <button
-            id="menuBtn"
-            type="button"
-            aria-label="Open menu"
-        >
-            ☰
-        </button>
-
-        <nav id="mainNav">
-            <a href="index.html">Home</a>
-            <a href="listing.html?module=jobs">Jobs</a>
-            <a href="listing.html?module=admit_card">Admit Cards</a>
-            <a href="listing.html?module=result">Results</a>
-            <a class="active" href="photo-tools.html">Photo Tools</a>
-        </nav>
-
-    </div>
 </header>
+
+
 
 <main class="wrap">
 
@@ -212,39 +237,57 @@
 
 </main>
 
-<footer>
 
-    <div class="foot">
+
+
+<footer class="dr-footer">
+
+    <div class="dr-footer-inner">
 
         <div>
-            <h3>Daksh Rojgar</h3>
+            <h3>DAKSH ROJGAR</h3>
             <p>
-                Government Jobs, Results, Admit Cards
-                and useful online tools.
+                Employment news, recruitment, admit cards,
+                results, exam information और useful online tools.
             </p>
         </div>
 
         <div>
-            <h4>Quick Links</h4>
-            <a href="index.html">Home</a>
-            <a href="listing.html?module=jobs">Jobs</a>
-            <a href="contact.html">Contact</a>
+            <h4>Updates</h4>
+            <a href="listing.html?module=jobs">Latest Jobs</a>
+            <a href="listing.html?module=admit_card">Admit Cards</a>
+            <a href="listing.html?module=result">Results</a>
+            <a href="listing.html?module=answer_key">Answer Key</a>
         </div>
 
         <div>
-            <h4>Legal</h4>
+            <h4>Resources</h4>
+            <a href="listing.html?module=syllabus">Syllabus</a>
+            <a href="listing.html?module=current_affairs">Current Affairs</a>
+            <a href="listing.html?module=yojana">Schemes &amp; Yojana</a>
+            <a href="photo-tools.html">Photo Tools</a>
+            <a href="pdf-tools.html">PDF Tools</a>
+        </div>
+
+        <div>
+            <h4>Legal &amp; Contact</h4>
             <a href="privacy-policy.html">Privacy Policy</a>
             <a href="terms.html">Terms</a>
             <a href="disclaimer.html">Disclaimer</a>
+            <a href="contact.html">Contact</a>
         </div>
 
     </div>
 
-    <div class="copy">
-        © <span id="year">2026</span> Daksh Rojgar
+    <div class="dr-footer-bottom">
+        <span>© <span id="year">2026</span> Daksh Rojgar. All rights reserved.</span>
+        <span>Viratnagar, Rajasthan, India</span>
     </div>
 
 </footer>
+
+
+
 
 <script>
     const year = document.getElementById("year");
@@ -263,5 +306,6 @@
     }
 </script>
 
+<script src="script.js"></script>
 </body>
 </html>

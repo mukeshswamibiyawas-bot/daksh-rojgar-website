@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,11 +8,11 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Daksh Rojgar | Latest Jobs, Admit Cards, Results & Government Updates</title>
+    <title>Daksh Rojgar | Employment News, Jobs, Admit Cards, Results & Exam Updates</title>
 
     <meta
         name="description"
-        content="Daksh Rojgar provides latest government jobs, admit cards, results, current affairs, government schemes, Rajasthan updates, photo tools and PDF tools."
+        content="Daksh Rojgar provides employment news, jobs, recruitment updates, admit cards, exam results, answer keys, syllabus, current affairs, schemes and useful photo and PDF tools."
     >
 
     <link
@@ -22,10 +22,13 @@
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Daksh Rojgar">
-    <meta property="og:title" content="Daksh Rojgar | Jobs, Admit Cards, Results & Updates">
+    <meta
+        property="og:title"
+        content="Daksh Rojgar | Jobs, Admit Cards, Results & Exam Updates"
+    >
     <meta
         property="og:description"
-        content="Latest government jobs, admit cards, results, current affairs, schemes and useful online tools."
+        content="Employment news, jobs, admit cards, results, answer keys, exam updates and useful online tools."
     >
     <meta
         property="og:url"
@@ -43,26 +46,39 @@
     </script>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="home-redesign.css">
 </head>
 
-<body>
+<body class="home-v2">
 
-<header>
-    <div class="top">
+<header class="dr-header">
 
-        <div class="date">
-            July 31, 2026
-            <span>e-Paper</span>
+    <div class="dr-topbar">
+        <div class="dr-topbar-inner">
+            <span>Employment • Education • Exam Information</span>
+
+            <div>
+                <a href="privacy-policy.html">Privacy</a>
+                <a href="disclaimer.html">Disclaimer</a>
+                <a href="contact.html">Contact</a>
+            </div>
         </div>
+    </div>
 
-        <div class="brand">
-            <h1>DAKSH ◈ ROJGAR</h1>
-            <p>Jobs • Results • Admit Cards</p>
-        </div>
+    <div class="dr-brand-wrap">
 
-        <div class="actions">
-            Login &nbsp; eBooks
-            <button type="button">SUBSCRIBE</button>
+        <a class="dr-brand" href="index.html">
+            <div class="dr-logo">DR</div>
+
+            <div>
+                <h1>DAKSH ROJGAR</h1>
+                <p>Employment News • Jobs • Exams • Results</p>
+            </div>
+        </a>
+
+        <div class="dr-brand-note">
+            <strong>Independent Information Platform</strong>
+            <span>Verify important information from the original official source.</span>
         </div>
 
     </div>
@@ -79,62 +95,24 @@
 
         <nav id="mainNav">
             <a class="active" href="index.html">Home</a>
-            <a href="listing.html?module=jobs">Jobs</a>
+            <a href="listing.html?module=jobs">Latest Jobs</a>
             <a href="listing.html?module=admit_card">Admit Cards</a>
             <a href="listing.html?module=result">Results</a>
+            <a href="listing.html?module=answer_key">Answer Key</a>
+            <a href="listing.html?module=syllabus">Syllabus</a>
             <a href="listing.html?module=current_affairs">Current Affairs</a>
-            <a href="listing.html?module=yojana">Government Schemes</a>
-            <a href="listing.html?module=syllabus">Study Material</a>
-            <a href="#">Tools</a>
-            <a href="#">More</a>
+            <a href="listing.html?module=yojana">Schemes &amp; Yojana</a>
+            <a href="photo-tools.html">Photo Tools</a>
+            <a href="pdf-tools.html">PDF Tools</a>
         </nav>
 
     </div>
+
 </header>
 
-<main class="wrap">
+<main class="dr-main">
 
-    <section class="utilities">
-
-        <form id="searchForm" class="search">
-            <span>⌕</span>
-
-            <input
-                id="searchInput"
-                type="search"
-                placeholder="Search for Jobs, Admit Cards, Results, Schemes..."
-            >
-
-            <button type="submit">
-                Search
-            </button>
-        </form>
-
-        <a class="tool" href="photo-tools.html">
-            <b>🖼️</b>
-
-            <div>
-                <h2>Photo Tools</h2>
-                <p>Compress, Resize, Crop Image &amp; more</p>
-            </div>
-
-            <i>→</i>
-        </a>
-
-        <a class="tool" href="pdf-tools.html">
-            <b class="pdf">PDF</b>
-
-            <div>
-                <h2>PDF Tools</h2>
-                <p>Merge, Split, Compress, Convert PDF &amp; more</p>
-            </div>
-
-            <i>→</i>
-        </a>
-
-    </section>
-
-    <section class="ticker">
+    <section class="ticker dr-ticker">
         <strong>LATEST UPDATES</strong>
 
         <a href="#">
@@ -146,194 +124,155 @@
         </a>
     </section>
 
-    <section class="cards">
+    
+    <section class="dr-info-grid dr-live-panels">
 
-        <a
-            class="card"
-            href="listing.html?module=jobs"
-        >
-            <div class="icon">💼</div>
-            <h3>Government Jobs</h3>
-            <p>Latest Government Job Updates</p>
-            <span>→</span>
-        </a>
+        <article class="dr-panel" data-home-module="jobs">
+            <div class="dr-panel-head">
+                <h2>💼 Latest Jobs</h2>
+                <a href="listing.html?module=jobs">View All</a>
+            </div>
+            <div class="dr-panel-links">
+                <div class="dr-panel-loading">Loading latest jobs...</div>
+            </div>
+        </article>
 
-        <a
-            class="card"
-            href="listing.html?module=admit_card"
-        >
-            <div class="icon">📄</div>
-            <h3>Admit Cards</h3>
-            <p>Download Latest Admit Cards</p>
-            <span>→</span>
-        </a>
+        <article class="dr-panel" data-home-module="admit_card">
+            <div class="dr-panel-head">
+                <h2>📄 Admit Cards</h2>
+                <a href="listing.html?module=admit_card">View All</a>
+            </div>
+            <div class="dr-panel-links">
+                <div class="dr-panel-loading">Loading admit cards...</div>
+            </div>
+        </article>
 
-        <a
-            class="card"
-            href="listing.html?module=result"
-        >
-            <div class="icon">🏆</div>
-            <h3>Results</h3>
-            <p>Check Latest Exam Results</p>
-            <span>→</span>
-        </a>
+        <article class="dr-panel" data-home-module="result">
+            <div class="dr-panel-head">
+                <h2>🏆 Results</h2>
+                <a href="listing.html?module=result">View All</a>
+            </div>
+            <div class="dr-panel-links">
+                <div class="dr-panel-loading">Loading results...</div>
+            </div>
+        </article>
 
-        <a
-            class="card"
-            href="listing.html?module=current_affairs"
-        >
-            <div class="icon">📚</div>
-            <h3>Current Affairs</h3>
-            <p>Daily Current Affairs and Updates</p>
-            <span>→</span>
-        </a>
+        <article class="dr-panel" data-home-module="answer_key">
+            <div class="dr-panel-head">
+                <h2>✅ Answer Key</h2>
+                <a href="listing.html?module=answer_key">View All</a>
+            </div>
+            <div class="dr-panel-links">
+                <div class="dr-panel-loading">Loading answer keys...</div>
+            </div>
+        </article>
 
-        <a
-            class="card"
-            href="listing.html?module=yojana"
-        >
-            <div class="icon">🏛️</div>
-            <h3>Government Schemes</h3>
-            <p>Latest Government Schemes</p>
-            <span>→</span>
-        </a>
+        <article class="dr-panel" data-home-module="syllabus">
+            <div class="dr-panel-head">
+                <h2>📝 Syllabus</h2>
+                <a href="listing.html?module=syllabus">View All</a>
+            </div>
+            <div class="dr-panel-links">
+                <div class="dr-panel-loading">Loading syllabus...</div>
+            </div>
+        </article>
 
-        <a
-            class="card"
-            href="listing.html?module=all_posts"
-        >
-            <div class="icon">🔔</div>
-            <h3>Notifications</h3>
-            <p>Get Instant Notifications</p>
-            <span>→</span>
-        </a>
-
-        <a
-            class="card"
-            href="listing.html?module=syllabus"
-        >
-            <div class="icon">📝</div>
-            <h3>Study Material</h3>
-            <p>Notes, PDFs and Study Resources</p>
-            <span>→</span>
-        </a>
-
-        <a class="card" href="pdf-tools.html">
-            <div class="icon">PDF</div>
-            <h3>PDF Tools</h3>
-            <p>Merge, Split, Compress PDFs and more</p>
-            <span>→</span>
-        </a>
-
-        <a class="card" href="photo-tools.html">
-            <div class="icon">🖼️</div>
-            <h3>Photo Tools</h3>
-            <p>Compress, Resize, Crop Image and more</p>
-            <span>→</span>
-        </a>
-
-        <a class="card" href="#">
-            <div class="icon">🧮</div>
-            <h3>Calculators</h3>
-            <p>Age, Percentage, EMI and more</p>
-            <span>→</span>
-        </a>
-
-        <a class="card" href="#">
-            <div class="icon">📰</div>
-            <h3>Latest News</h3>
-            <p>Latest Education and Job News</p>
-            <span>→</span>
-        </a>
-
-        <a class="card" href="#">
-            <div class="icon">🔎</div>
-            <h3>Exam Finder</h3>
-            <p>Find Exams Based on Profile</p>
-            <span>→</span>
-        </a>
+        <article class="dr-panel" data-home-module="current_affairs">
+            <div class="dr-panel-head">
+                <h2>📚 Current Affairs</h2>
+                <a href="listing.html?module=current_affairs">View All</a>
+            </div>
+            <div class="dr-panel-links">
+                <div class="dr-panel-loading">Loading current affairs...</div>
+            </div>
+        </article>
 
     </section>
 
-    <section class="benefits">
+    <section class="dr-source-section">
 
-        <article>
-            ⚡
-            <div>
-                <h3>Fast Updates</h3>
-                <p>Timely and authentic information</p>
-            </div>
-        </article>
+        <div>
+            <span class="dr-source-label">SOURCE TRANSPARENCY</span>
 
-        <article>
-            🛡️
-            <div>
-                <h3>Trusted Information</h3>
-                <p>Reliable and verified content</p>
-            </div>
-        </article>
+            <h2>Original official source से जानकारी verify करें</h2>
 
-        <article>
-            📱
-            <div>
-                <h3>Easy to Use</h3>
-                <p>Simple interface for everyone</p>
-            </div>
-        </article>
+            <p>
+                Daksh Rojgar एक independent employment और educational
+                information platform है। यह किसी सरकारी विभाग या संस्था
+                का official app या representative नहीं है।
+            </p>
+        </div>
 
-        <article>
-            🔒
-            <div>
-                <h3>Secure &amp; Safe</h3>
-                <p>Your data is always safe</p>
-            </div>
-        </article>
+        <div class="dr-source-links">
+
+            <a
+                href="https://employmentnews.gov.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Employment News ↗
+            </a>
+
+            <a
+                href="https://www.ncs.gov.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                National Career Service ↗
+            </a>
+
+            <a href="disclaimer.html">
+                Read Disclaimer →
+            </a>
+
+        </div>
 
     </section>
 
 </main>
 
-<footer>
+<footer class="dr-footer">
 
-    <div class="foot">
+    <div class="dr-footer-inner">
 
-        <div>
-            <h3>Daksh Rojgar</h3>
-
+        <div class="dr-footer-brand">
+            <h3>DAKSH ROJGAR</h3>
             <p>
-                Government Jobs, Admit Cards, Results,
-                Current Affairs and Government Schemes
-                information platform.
+                Employment news, recruitment, admit cards, results,
+                exam information और useful online tools.
             </p>
         </div>
 
         <div>
-            <h4>Quick Links</h4>
-            <a href="index.html">Home</a>
-            <a href="listing.html?module=all_posts">Services</a>
-            <a href="contact.html">Contact</a>
+            <h4>Updates</h4>
+            <a href="listing.html?module=jobs">Latest Jobs</a>
+            <a href="listing.html?module=admit_card">Admit Cards</a>
+            <a href="listing.html?module=result">Results</a>
+            <a href="listing.html?module=answer_key">Answer Key</a>
         </div>
 
         <div>
-            <h4>Legal</h4>
+            <h4>Resources</h4>
+            <a href="listing.html?module=syllabus">Syllabus</a>
+            <a href="listing.html?module=current_affairs">Current Affairs</a>
+            <a href="listing.html?module=yojana">Schemes &amp; Yojana</a>
+            <a href="photo-tools.html">Photo Tools</a>
+            <a href="pdf-tools.html">PDF Tools</a>
+        </div>
+
+        <div>
+            <h4>Legal &amp; Contact</h4>
             <a href="privacy-policy.html">Privacy Policy</a>
             <a href="terms.html">Terms</a>
             <a href="disclaimer.html">Disclaimer</a>
-        </div>
-
-        <div>
-            <h4>Contact</h4>
-            <p>Viratnagar, Rajasthan, India</p>
-
-            <a href="mailto:mukeshswami780@gmail.com">
-                mukeshswami780@gmail.com
-            </a>
+            <a href="contact.html">Contact</a>
         </div>
 
     </div>
 
-    <div class="copy">
-        © <span id="year">2026</span> Daksh Rojgar
+    <div class="dr-copy">
+        <span>© <span id="year">2026</span> Daksh Rojgar. All rights reserved.</span>
+        <span>Viratnagar, Rajasthan, India</span>
     </div>
 
 </footer>

@@ -583,3 +583,287 @@ async function initializeWebsite() {
     }
 }
 initializeWebsite();
+
+/* ==========================================================
+   Daksh Home Direct Notification Panels
+========================================================== */
+
+function normalizeDakshModule(value) {
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replaceAll("-", "_")
+        .replaceAll(" ", "_");
+}
+
+function getDakshItemModule(item) {
+
+    if (item?.source_type === "job") {
+        return "jobs";
+    }
+
+    const candidates = [
+        item?.category,
+        item?.module,
+        item?.post_type,
+        item?.type,
+        item?.section,
+        item?.content_type
+    ];
+
+    for (const candidate of candidates) {
+
+        const value =
+            normalizeDakshModule(candidate);
+
+        if (!value) {
+            continue;
+        }
+
+        if (
+            value === "job" ||
+            value === "jobs"
+        ) {
+            return "jobs";
+        }
+
+        if (
+            value === "admit_card" ||
+            value === "admit_cards" ||
+            value.includes("admit")
+        ) {
+            return "admit_card";
+        }
+
+        if (
+            value === "result" ||
+            value === "results" ||
+            value.includes("result")
+        ) {
+            return "result";
+        }
+
+        if (
+            value === "answer_key" ||
+            value === "answerkey" ||
+            value.includes("answer_key")
+        ) {
+            return "answer_key";
+        }
+
+        if (
+            value === "syllabus" ||
+            value.includes("syllabus")
+        ) {
+            return "syllabus";
+        }
+
+        if (
+            value === "current_affairs" ||
+            value === "current_affair" ||
+            value.includes("current_affair")
+        ) {
+            return "current_affairs";
+        }
+    }
+
+    return "";
+}
+
+
+function formatDakshHomeDate(item) {
+
+    const date = getItemDate(item);
+
+    if (
+        !date ||
+        date.getTime() === 0
+    ) {
+        return "";
+    }
+
+    try {
+        return date.toLocaleDateString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+    } catch {
+        return "";
+    }
+}
+
+
+function renderDakshDirectPanels(items) {
+
+    const panels =
+        document.querySelectorAll(
+            ".dr-panel[data-home-module]"
+        );
+
+    if (!panels.length) {
+        return;
+    }
+
+    panels.forEach((panel) => {
+
+        const moduleName =
+            panel.dataset.homeModule;
+
+        const container =
+            panel.querySelector(
+                ".dr-panel-links"
+            );
+
+        if (!container) {
+            return;
+        }
+
+        const moduleItems =
+            (Array.isArray(items) ? items : [])
+                .filter(
+                    (item) =>
+                        getDakshItemModule(item) ===
+                        moduleName
+                )
+                .sort(
+                    (a, b) =>
+                        getItemDate(b) -
+                        getItemDate(a)
+                )
+                .slice(0, 6);
+
+        if (!moduleItems.length) {
+
+            container.innerHTML =
+                '<div class="dr-panel-empty">अभी कोई नई notification उपलब्ध नहीं है।</div>';
+
+            return;
+        }
+
+        container.innerHTML =
+            moduleItems
+                .map((item) => {
+
+                    const title =
+                        escapeHtml(
+                            getItemTitle(item)
+                        );
+
+                    const destination =
+                        getItemDestination(item);
+
+                    const date =
+                        escapeHtml(
+                            formatDakshHomeDate(item)
+                        );
+
+                    const target =
+                        destination.external
+                            ? ' target="_blank" rel="noopener noreferrer"'
+                            : "";
+
+                    return `
+                        <a
+                            class="dr-notification-link"
+                            href="${escapeHtml(destination.url)}"
+                            ${target}
+                        >
+                            <span class="dr-notification-main">
+
+                                <span class="dr-new-badge">
+                                    NEW
+                                </span>
+
+                                <span class="dr-notification-text">
+
+                                    <span class="dr-notification-title">
+                                        ${title}
+                                    </span>
+
+                                    ${
+                                        date
+                                            ? `<span class="dr-notification-date">${date}</span>`
+                                            : ""
+                                    }
+
+                                </span>
+
+                            </span>
+
+                            <span class="dr-notification-arrow">
+                                ›
+                            </span>
+
+                        </a>
+                    `;
+                })
+                .join("");
+    });
+}
+
+
+async function loadDakshDirectHomePanels() {
+
+    const cached =
+        getHomeContentCache();
+
+    if (
+        Array.isArray(cached) &&
+        cached.length
+    ) {
+        renderDakshDirectPanels(
+            cached
+        );
+    }
+
+    try {
+
+        const liveItems =
+            await fetchLiveContent();
+
+        renderDakshDirectPanels(
+            liveItems
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "[Daksh Website] Direct panel load failed:",
+            error
+        );
+
+        if (
+            !Array.isArray(cached) ||
+            !cached.length
+        ) {
+            renderDakshDirectPanels([]);
+        }
+    }
+}
+
+
+if (
+    document.querySelector(
+        ".dr-panel[data-home-module]"
+    )
+) {
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            loadDakshDirectHomePanels
+        );
+
+    } else {
+
+        loadDakshDirectHomePanels();
+    }
+}
