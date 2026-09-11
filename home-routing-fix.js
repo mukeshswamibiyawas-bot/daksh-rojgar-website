@@ -4,6 +4,14 @@
     const API_BASE_URL = "https://daksh-rojgar-api.onrender.com";
     let jobMap = new Map();
 
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+            .register("site-fixes-sw.js?v=20260911", { scope: "./" })
+            .catch((error) => {
+                console.warn("[Daksh Site] Service worker registration failed", error);
+            });
+    }
+
     const normalize = (value) =>
         String(value || "")
             .replace(/\bnew\b/gi, " ")
