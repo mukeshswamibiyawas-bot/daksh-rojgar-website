@@ -1,0 +1,39 @@
+name: Repair PDF Tool Activation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/repair-pdf-tool-activation.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore hidden PDF action controls
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('pdf-workbench.html')
+          s = p.read_text(encoding='utf-8-sig')
+          marker = '<script src="pdf-workbench.js"></script>'
+          panel = '<div id="pdfActionPanel" hidden><button type="button" data-pdf-action="merge"><strong>Merge PDF</strong></button><button type="button" data-pdf-action="split"><strong>Split PDF</strong></button><button type="button" data-pdf-action="resize-kb"><strong>Resize PDF in KB</strong></button><button type="button" data-pdf-action="image-to-pdf"><strong>Images to PDF</strong></button><button type="button" data-pdf-action="pdf-to-image"><strong>PDF to Images</strong></button><button type="button" data-pdf-action="remove-pages"><strong>Remove Pages</strong></button><button type="button" data-pdf-action="rotate"><strong>Rotate</strong></button><button type="button" data-pdf-action="reorder"><strong>Reorder</strong></button></div>\n\n'
+          if 'id="pdfActionPanel"' not in s:
+              if marker not in s:
+                  raise SystemExit('pdf-workbench.js marker not found')
+              s = s.replace(marker, panel + marker, 1)
+              p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit repair
+        shell: bash
+        run: |
+          git config user.name "Daksh Rojgar Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- pdf-workbench.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Restore PDF tool activation controls"
+          git push origin HEAD:main
