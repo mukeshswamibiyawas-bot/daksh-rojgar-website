@@ -1,0 +1,60 @@
+name: Restore and Fix Home Script
+on:
+  push:
+    paths:
+      - '.github/workflows/restore-and-fix-home-script.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore known-good script and apply safe routing fixes
+        shell: bash
+        run: |
+          git show e99862247b8e9a3ebd328a8a3a81725defae40d9:script.js > script.js
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('script.js')
+          s=p.read_text(encoding='utf-8-sig')
+          start=s.index('function getItemDestination(item) {')
+          end=s.index('/* =================================\n   Fast Website Content Cache', start)
+          new='''function getItemDestination(item) {
+              if (item && item.source_type === "post" && item.id) {
+                  return { url: `post.html?id=${encodeURIComponent(item.id)}`, external: false };
+              }
+              if (item && item.source_type === "job" && item.id) {
+                  return { url: `job.html?id=${encodeURIComponent(item.id)}`, external: false };
+              }
+              return { url: "#", external: false };
+          }
+
+          '''
+          s=s[:start]+new+s[end:]
+          # The ticker View All should open the combined compact listing, not merely scroll Home.
+          s=s.replace('href="#"\n                id="viewAllUpdates"','href="listing.html?module=all_updates"\n                id="viewAllUpdates"')
+          s=s.replace('href="#"\n            id="viewAllUpdates"','href="listing.html?module=all_updates"\n            id="viewAllUpdates"')
+          # Remove the old JS click interception so the href above works normally.
+          marker='    const viewAllButton =\n        document.getElementById(\n            "viewAllUpdates"\n        );'
+          pos=s.find(marker)
+          if pos != -1:
+              nxt=s.find('\n}\n\n/* =================================\n   Search', pos)
+              if nxt != -1:
+                  s=s[:pos]+s[nxt+2:]
+          p.write_text(s,encoding='utf-8')
+          PY
+          node --check script.js
+          node --check listing.js
+      - name: Commit
+        shell: bash
+        run: |
+          git config user.name "Daksh Rojgar Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- script.js
+          git commit -m "Fix home notification detail and View All routing"
+          git push origin HEAD:main
