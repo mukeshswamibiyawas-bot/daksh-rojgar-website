@@ -332,6 +332,233 @@ body.dr-workbench-page .photo-action-card strong { font-size: 12px !important; }
 body.dr-workbench-page .photo-action-card small { font-size: 10px !important; color: #687a93 !important; }
 body.dr-workbench-page footer { margin-top: 0; }
 
+/* =====================================================
+   PDF WORKBENCH — REFERENCE 6/7 SIDE-PANEL LAYOUT
+   Large preview on the left, compact controls on the right.
+   Keeps Daksh Rojgar blue branding while following the
+   requested iLovePDF-like workspace structure.
+===================================================== */
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .wrap {
+  width: 100%;
+  max-width: none;
+  padding: 22px 0 0;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .listing-hero {
+  width: min(1220px, calc(100% - 36px));
+  margin: 0 auto 16px;
+  text-align: left;
+  padding: 8px 0 14px;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .listing-hero h1 {
+  font-size: clamp(30px, 3.2vw, 44px);
+  margin: 5px 0 6px;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-workbench-shell {
+  width: 100%;
+  min-height: 590px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid #dce5f2;
+  border-radius: 0;
+  box-shadow: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-rows: auto minmax(500px, auto);
+  grid-template-areas:
+    "upload upload"
+    "preview options";
+  background: #f3f5fa;
+  overflow: visible;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .background-tool-controls {
+  grid-area: upload;
+  width: 100%;
+  min-height: 86px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 22px;
+  background: #fff;
+  border-bottom: 1px solid #dfe6ef;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .background-upload-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 128px;
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 17px;
+  cursor: pointer;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) #pdfMainInput {
+  max-width: 260px;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) #pdfStatus {
+  margin: 0 0 0 auto;
+  color: #536985;
+  font-size: 13px;
+  max-width: 380px;
+  text-align: right;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .background-preview-area {
+  grid-area: preview;
+  min-width: 0;
+  background: #f3f5fa;
+  padding: 24px;
+  border-right: 1px solid #d7dee9;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) #pdfMainPreview {
+  min-height: 500px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: auto;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) #pdfMainPreview > span,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-selected-file-summary {
+  margin: auto;
+}
+
+/* Force the selected processing panel into the right sidebar. */
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool=image-to-pdf"]) #imageToPdfPanel,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool=merge"]) #mergePdfPanel,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool=split"]) #splitPdfPanel,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool=resize-kb"]) #resizePdfKbPanel,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool=pdf-to-image"]) #pdfToImagesPanel,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool=remove-pages"]) #removePagesPanel,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool=rotate"]) #rotatePagesPanel,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool=reorder"]) #reorderPagesPanel {
+  display: flex !important;
+  grid-area: options;
+  min-height: 500px;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-self: stretch;
+  margin: 0;
+  padding: 20px 18px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: #fff;
+  overflow: auto;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .photo-processing-heading {
+  margin: -2px -18px 16px;
+  padding: 0 18px 14px;
+  border-bottom: 1px solid #dfe4ec;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .photo-processing-heading h2 {
+  margin: 0 0 5px;
+  font-size: 25px;
+  color: #20283a;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .photo-processing-heading p {
+  margin: 0;
+  color: #66758b;
+  line-height: 1.45;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .passport-controls,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-resize-controls,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-to-images-controls,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-rotate-controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) select,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) input[type="number"] {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-split-actions,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-resize-actions,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-to-images-actions,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-remove-actions,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-rotate-actions,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-reorder-actions {
+  margin-top: auto;
+  display: grid;
+  gap: 10px;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .photo-processing-panel button {
+  min-height: 46px;
+  font-size: 15px;
+}
+
+/* iLovePDF-like preview cards: compact thumbnails instead of giant images. */
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-image-preview-grid,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .merge-preview-grid,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .split-preview-grid,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .remove-pages-grid,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .rotate-pages-grid {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-image-preview-card,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .merge-preview-card,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .split-preview-card,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .remove-page-card,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .rotate-page-card,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .reorder-page-card {
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
+  min-height: 240px;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(35, 52, 80, .12);
+  overflow: hidden;
+}
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-image-preview-card img,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .merge-preview-card canvas,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .split-preview-card canvas,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .remove-page-card canvas,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .rotate-page-card canvas,
+body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .reorder-page-card canvas {
+  width: 100% !important;
+  height: 190px !important;
+  object-fit: contain;
+  display: block;
+}
+
+/* Hide obsolete bottom tool-card chooser; top menu is the chooser now. */
+body.dr-workbench-page .photo-action-panel,
+body.dr-workbench-page #pdfActionPanel {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .pdf-workbench-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas: "upload" "preview" "options";
+  }
+  body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .background-preview-area {
+    border-right: 0;
+    border-bottom: 1px solid #d7dee9;
+  }
+  body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) #pdfStatus {
+    margin-left: 0;
+    text-align: left;
+  }
+}
+
 @media (max-width: 760px) {
   .dr-inner-page .detail-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dr-listing-page .live-listing-card {
@@ -343,4 +570,12 @@ body.dr-workbench-page footer { margin-top: 0; }
   .tool-app-top { min-height: 60px; }
   .tool-app-brand { font-size: 17px; }
   .tool-home-links a { padding: 7px 8px; font-size: 12px; }
+  body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) .background-tool-controls {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  body.dr-workbench-page:has(.tool-nav-inner a.active[href*="tool="]) #pdfStatus {
+    width: 100%;
+    max-width: none;
+  }
 }
