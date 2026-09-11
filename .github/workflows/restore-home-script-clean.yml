@@ -13,47 +13,18 @@ jobs:
   restore:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Restore known-good home script and route jobs internally
+      - name: Restore known-good homepage script
         shell: bash
         run: |
           git show e99862247b8e9a3ebd328a8a3a81725defae40d9:script.js > script.js
-          python3 <<'PY'
-          from pathlib import Path
-          p = Path('script.js')
-          s = p.read_text(encoding='utf-8-sig')
-          start = s.index('function getItemDestination(item) {')
-          end = s.index('/* =================================\n   Fast Website Content Cache', start)
-          replacement = '''function getItemDestination(item) {
-    if (item && item.source_type === "post" && item.id) {
-        return {
-            url: `post.html?id=${encodeURIComponent(item.id)}`,
-            external: false,
-        };
-    }
-
-    if (item && item.source_type === "job" && item.id) {
-        return {
-            url: `job.html?id=${encodeURIComponent(item.id)}`,
-            external: false,
-        };
-    }
-
-    return {
-        url: "#",
-        external: false,
-    };
-}
-
-'''
-          p.write_text(s[:start] + replacement + s[end:], encoding='utf-8')
-          PY
           node --check script.js
 
-      - name: Commit repaired script
+      - name: Commit restored script
         shell: bash
         run: |
           git config user.name "Daksh Rojgar Bot"
@@ -63,5 +34,5 @@ jobs:
             echo "No script changes"
             exit 0
           fi
-          git commit -m "Restore homepage live data and internal job routing"
+          git commit -m "Restore working homepage live data script"
           git push origin HEAD:main
