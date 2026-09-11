@@ -1,0 +1,159 @@
+body.dr-workbench-page .listing-hero {
+  text-align: left;
+  padding: 34px 0 22px;
+}
+
+body.dr-workbench-page .listing-hero h1 {
+  font-size: clamp(30px,4vw,44px);
+  margin: 6px 0 8px;
+}
+
+body.dr-workbench-page .listing-hero p {
+  font-size: 17px;
+}
+
+body.dr-workbench-page .pdf-workbench-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(300px, .95fr);
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  min-height: 560px;
+}
+
+body.dr-workbench-page .pdf-workbench-shell > .background-tool-controls {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #dde6f3;
+  background: #fff;
+}
+
+body.dr-workbench-page .pdf-workbench-shell > .background-tool-controls .background-upload-label {
+  margin: 0;
+  padding: 12px 20px;
+}
+
+body.dr-workbench-page .pdf-workbench-shell > .background-tool-controls input[type="file"] {
+  max-width: 360px;
+}
+
+body.dr-workbench-page .pdf-workbench-shell > .background-tool-controls #pdfStatus {
+  margin: 0 0 0 auto;
+  color: #5c6e87;
+  font-size: 13px;
+}
+
+body.dr-workbench-page .pdf-workbench-shell > .background-preview-area {
+  grid-column: 1;
+  min-width: 0;
+  padding: 28px;
+  background: #f7f9fc;
+  border-right: 1px solid #dde6f3;
+}
+
+body.dr-workbench-page .pdf-workbench-shell .pdf-preview-box {
+  min-height: 460px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f9fc;
+  border: 0;
+}
+
+body.dr-workbench-page .pdf-workbench-shell > .photo-processing-panel:not([hidden]) {
+  grid-column: 2;
+  display: block;
+  align-self: stretch;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 24px 20px;
+  background: #fff;
+}
+
+body.dr-workbench-page .pdf-workbench-shell > .photo-processing-panel:not([hidden]) .photo-processing-heading {
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e1e8f2;
+}
+
+body.dr-workbench-page .pdf-workbench-shell > .photo-processing-panel:not([hidden]) .photo-processing-heading h2 {
+  margin: 0 0 7px;
+  font-size: 24px;
+  color: #10223f;
+}
+
+body.dr-workbench-page .pdf-workbench-shell select,
+body.dr-workbench-page .pdf-workbench-shell input[type="number"] {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #c9d5e7;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #fff;
+}
+
+body.dr-workbench-page .pdf-workbench-shell .passport-controls,
+body.dr-workbench-page .pdf-workbench-shell .pdf-resize-controls,
+body.dr-workbench-page .pdf-workbench-shell .pdf-to-images-controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+body.dr-workbench-page .pdf-workbench-shell button {
+  min-height: 48px;
+  font-size: 15px;
+}
+
+body.dr-workbench-page .pdf-workbench-shell .pdf-tool-info,
+body.dr-workbench-page .pdf-workbench-shell .tool-info {
+  margin: 15px 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f3f7fd;
+  color: #47617f;
+}
+
+body.dr-workbench-page .tool-app-header {
+  position: static;
+}
+
+body.dr-workbench-page .tool-app-top {
+  min-height: 84px;
+}
+
+body.dr-workbench-page .tool-app-brand {
+  font-size: 25px;
+}
+
+body.dr-workbench-page .tool-nav-strip {
+  background: #19479e;
+}
+
+body.dr-workbench-page .tool-nav-inner a.active {
+  background: rgba(255,255,255,.1);
+  border-bottom-color: #ffd32a;
+}
+
+@media (max-width: 900px) {
+  body.dr-workbench-page .pdf-workbench-shell {
+    grid-template-columns: 1fr;
+  }
+  body.dr-workbench-page .pdf-workbench-shell > .background-preview-area,
+  body.dr-workbench-page .pdf-workbench-shell > .photo-processing-panel:not([hidden]) {
+    grid-column: 1;
+    border-right: 0;
+  }
+  body.dr-workbench-page .pdf-workbench-shell > .background-tool-controls {
+    flex-wrap: wrap;
+  }
+  body.dr-workbench-page .pdf-workbench-shell > .background-tool-controls #pdfStatus {
+    width: 100%;
+    margin-left: 0;
+  }
+}
