@@ -1,0 +1,82 @@
+name: Direct Photo and PDF Tool Entry
+
+on:
+  push:
+    paths:
+      - '.github/workflows/direct-tools-entry.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Route Photo Tools and PDF Tools directly to workbenches
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          PHOTO_TARGET = 'photo-workbench.html?tool=background'
+          PDF_TARGET = 'pdf-workbench.html?tool=image-to-pdf'
+
+          for p in Path('.').rglob('*.html'):
+              if '.github' in p.parts:
+                  continue
+              s = p.read_text(encoding='utf-8-sig')
+              old = s
+              s = s.replace('href="photo-tools.html"', f'href="{PHOTO_TARGET}"')
+              s = s.replace("href='photo-tools.html'", f"href='{PHOTO_TARGET}'")
+              s = s.replace('href="pdf-tools.html"', f'href="{PDF_TARGET}"')
+              s = s.replace("href='pdf-tools.html'", f"href='{PDF_TARGET}'")
+              if s != old:
+                  p.write_text(s, encoding='utf-8')
+
+          # Keep old landing URLs useful by redirecting immediately.
+          photo_redirect = '''<!DOCTYPE html>
+<html lang="hi-IN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Tools | Daksh Rojgar</title>
+  <meta http-equiv="refresh" content="0; url=photo-workbench.html?tool=background">
+  <link rel="canonical" href="https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/photo-workbench.html?tool=background">
+  <script>location.replace('photo-workbench.html?tool=background');</script>
+</head>
+<body></body>
+</html>
+'''
+          pdf_redirect = '''<!DOCTYPE html>
+<html lang="hi-IN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Tools | Daksh Rojgar</title>
+  <meta http-equiv="refresh" content="0; url=pdf-workbench.html?tool=image-to-pdf">
+  <link rel="canonical" href="https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/pdf-workbench.html?tool=image-to-pdf">
+  <script>location.replace('pdf-workbench.html?tool=image-to-pdf');</script>
+</head>
+<body></body>
+</html>
+'''
+          Path('photo-tools.html').write_text(photo_redirect, encoding='utf-8')
+          Path('pdf-tools.html').write_text(pdf_redirect, encoding='utf-8')
+          print('Direct tool entry applied')
+          PY
+
+      - name: Commit direct tool entry
+        shell: bash
+        run: |
+          git config user.name "Daksh Rojgar Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- '*.html'
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git commit -m "Open Photo and PDF workbenches directly"
+          git push origin HEAD:main
