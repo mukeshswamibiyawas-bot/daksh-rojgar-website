@@ -83,13 +83,81 @@ window.addEventListener("DOMContentLoaded", () => {
     link.classList.toggle("active", link.href.includes(`tool=${requested}`));
   });
 
-  // The legacy PDF script inserts active panels immediately before
-  // #pdfActionPanel. Keep that hidden anchor inside the workbench first,
-  // so every tool stays in the right-side options column instead of moving
-  // below the footer.
   if (shell && actionPanel && actionPanel.parentElement !== shell) {
     shell.appendChild(actionPanel);
   }
+
+  const enforceImageToPdfLayout = () => {
+    if (!shell || requested !== "image-to-pdf") return;
+
+    const upload = shell.querySelector(":scope > .background-tool-controls");
+    const previewArea = shell.querySelector(":scope > .background-preview-area");
+    const previewBox = document.getElementById("pdfMainPreview");
+    const panel = document.getElementById("imageToPdfPanel");
+    const fileList = document.getElementById("imageToPdfList");
+
+    shell.style.setProperty("display", "grid", "important");
+    shell.style.setProperty("grid-template-columns", "minmax(0, 1fr) 360px", "important");
+    shell.style.setProperty("grid-template-rows", "auto minmax(420px, auto)", "important");
+
+    if (upload) {
+      upload.style.setProperty("grid-column", "1 / -1", "important");
+      upload.style.setProperty("grid-row", "1", "important");
+    }
+
+    if (previewArea) {
+      previewArea.style.setProperty("grid-column", "1", "important");
+      previewArea.style.setProperty("grid-row", "2", "important");
+      previewArea.style.setProperty("min-width", "0", "important");
+      previewArea.style.setProperty("overflow", "hidden", "important");
+    }
+
+    if (panel) {
+      panel.hidden = false;
+      panel.style.setProperty("grid-column", "2", "important");
+      panel.style.setProperty("grid-row", "2", "important");
+      panel.style.setProperty("grid-area", "auto", "important");
+      panel.style.setProperty("position", "static", "important");
+      panel.style.setProperty("width", "100%", "important");
+      panel.style.setProperty("max-width", "360px", "important");
+      panel.style.setProperty("min-width", "0", "important");
+      panel.style.setProperty("margin", "0", "important");
+      panel.style.setProperty("transform", "none", "important");
+      panel.style.setProperty("float", "none", "important");
+      panel.style.setProperty("overflow", "auto", "important");
+    }
+
+    if (previewBox) {
+      previewBox.style.setProperty("width", "100%", "important");
+      previewBox.style.setProperty("max-width", "100%", "important");
+      previewBox.style.setProperty("overflow", "auto", "important");
+      previewBox.style.setProperty("align-items", "flex-start", "important");
+      previewBox.style.setProperty("justify-content", "flex-start", "important");
+
+      const grid = previewBox.querySelector(".pdf-image-preview-grid");
+      if (grid) {
+        grid.style.setProperty("display", "grid", "important");
+        grid.style.setProperty("grid-template-columns", "repeat(auto-fill, minmax(115px, 135px))", "important");
+        grid.style.setProperty("gap", "12px", "important");
+        grid.style.setProperty("align-items", "start", "important");
+        grid.style.setProperty("width", "100%", "important");
+      }
+
+      previewBox.querySelectorAll(".pdf-image-preview-card").forEach((card) => {
+        card.style.setProperty("position", "relative", "important");
+        card.style.setProperty("width", "132px", "important");
+        card.style.setProperty("max-width", "132px", "important");
+        card.style.setProperty("min-height", "150px", "important");
+        card.style.setProperty("margin", "0", "important");
+        card.style.setProperty("transform", "none", "important");
+        card.style.setProperty("float", "none", "important");
+      });
+    }
+
+    if (fileList) {
+      fileList.style.setProperty("display", "none", "important");
+    }
+  };
 
   const normalizeActivePanel = () => {
     if (!shell) return;
@@ -110,13 +178,32 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     shell.dataset.activeTool = requested;
+    enforceImageToPdfLayout();
   };
 
-  // pdf-workbench.js finishes its own DOMContentLoaded setup first.
   window.setTimeout(() => {
     const button = document.querySelector(config.selector);
     if (button) button.click();
     window.setTimeout(normalizeActivePanel, 0);
     window.setTimeout(normalizeActivePanel, 120);
   }, 80);
+
+  if (requested === "image-to-pdf") {
+    const input = document.getElementById("pdfMainInput");
+    const previewBox = document.getElementById("pdfMainPreview");
+
+    if (input) {
+      input.addEventListener("change", () => {
+        window.setTimeout(enforceImageToPdfLayout, 0);
+        window.setTimeout(enforceImageToPdfLayout, 100);
+      });
+    }
+
+    if (previewBox) {
+      const observer = new MutationObserver(() => {
+        window.setTimeout(enforceImageToPdfLayout, 0);
+      });
+      observer.observe(previewBox, { childList: true, subtree: true });
+    }
+  }
 });
