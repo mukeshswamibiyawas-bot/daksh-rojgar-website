@@ -105,14 +105,26 @@ function getItemDestination(item) {
 
     /*
      * Job:
-     * Always open Daksh Rojgar internal detail first.
+     * अभी website job detail page नहीं बना है.
+     * इसलिए पहले available external link खोलेंगे.
      */
-    if (item.source_type === "job" && item.id) {
-        return {
-            url: `job.html?id=${encodeURIComponent(item.id)}`,
-            external: false,
-        };
-    };
+    if (
+        item.source_type === "job"
+    ) {
+        const jobUrl =
+            item.apply_link ||
+            item.official_website ||
+            item.download_notification_link ||
+            item.pdf_url ||
+            "";
+
+        if (jobUrl) {
+            return {
+                url: makeAbsoluteBackendUrl(
+                    jobUrl
+                ),
+                external: true,
+            };
         }
     }
 
@@ -330,7 +342,7 @@ function renderLatestUpdates(items) {
             </span>
 
             <a
-                href="listing.html?module=all_updates"
+                href="#"
                 id="viewAllUpdates"
             >
                 View All →
@@ -377,12 +389,38 @@ function renderLatestUpdates(items) {
         ${updateLinks}
 
         <a
-            href="listing.html?module=all_updates"
+            href="#"
             id="viewAllUpdates"
         >
             View All →
         </a>
     `;
+
+    const viewAllButton =
+        document.getElementById(
+            "viewAllUpdates"
+        );
+
+    if (viewAllButton) {
+        viewAllButton.addEventListener(
+            "click",
+            (event) => {
+                event.preventDefault();
+
+                document
+                    .querySelector(
+                        ".cards"
+                    )
+                    ?.scrollIntoView({
+                        behavior:
+                            "smooth",
+                        block:
+                            "start",
+                    });
+            }
+        );
+    }
+}
 
 /* =================================
    Search
