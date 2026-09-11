@@ -1,6 +1,6 @@
 body.dr-workbench-page .listing-hero {
   text-align: left;
-  padding: 34px 0 22px;
+  padding: 28px 0 20px;
 }
 
 body.dr-workbench-page .listing-hero h1 {
@@ -9,24 +9,31 @@ body.dr-workbench-page .listing-hero h1 {
 }
 
 body.dr-workbench-page .listing-hero p {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 body.dr-workbench-page .pdf-workbench-shell {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(300px, .95fr);
-  gap: 0;
-  padding: 0;
-  overflow: hidden;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 360px !important;
+  grid-template-rows: auto minmax(500px, auto) !important;
+  grid-template-areas:
+    "upload upload"
+    "preview options" !important;
+  gap: 0 !important;
+  width: 100% !important;
+  padding: 0 !important;
+  overflow: hidden !important;
   min-height: 560px;
+  background: #f3f5fa;
 }
 
 body.dr-workbench-page .pdf-workbench-shell > .background-tool-controls {
-  grid-column: 1 / -1;
-  display: flex;
+  grid-area: upload !important;
+  display: flex !important;
   align-items: center;
+  justify-content: center;
   gap: 14px;
-  padding: 18px 20px;
+  padding: 16px 20px;
   border-bottom: 1px solid #dde6f3;
   background: #fff;
 }
@@ -44,40 +51,55 @@ body.dr-workbench-page .pdf-workbench-shell > .background-tool-controls #pdfStat
   margin: 0 0 0 auto;
   color: #5c6e87;
   font-size: 13px;
+  max-width: 360px;
+  text-align: right;
 }
 
 body.dr-workbench-page .pdf-workbench-shell > .background-preview-area {
-  grid-column: 1;
+  grid-area: preview !important;
   min-width: 0;
-  padding: 28px;
-  background: #f7f9fc;
+  min-height: 500px;
+  padding: 24px !important;
+  background: #f3f5fa;
   border-right: 1px solid #dde6f3;
 }
 
 body.dr-workbench-page .pdf-workbench-shell .pdf-preview-box {
-  min-height: 460px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f7f9fc;
-  border: 0;
+  min-height: 500px !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  overflow: auto !important;
+}
+
+body.dr-workbench-page .pdf-workbench-shell > .photo-processing-panel {
+  display: none !important;
 }
 
 body.dr-workbench-page .pdf-workbench-shell > .photo-processing-panel:not([hidden]) {
-  grid-column: 2;
-  display: block;
-  align-self: stretch;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 24px 20px;
-  background: #fff;
+  grid-area: options !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-self: stretch !important;
+  min-width: 0;
+  min-height: 500px;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 20px 18px !important;
+  background: #fff !important;
+  overflow: auto;
 }
 
 body.dr-workbench-page .pdf-workbench-shell > .photo-processing-panel:not([hidden]) .photo-processing-heading {
   padding-bottom: 14px;
-  margin-bottom: 16px;
+  margin: 0 -18px 16px;
+  padding-left: 18px;
+  padding-right: 18px;
   border-bottom: 1px solid #e1e8f2;
 }
 
@@ -91,6 +113,7 @@ body.dr-workbench-page .pdf-workbench-shell select,
 body.dr-workbench-page .pdf-workbench-shell input[type="number"] {
   width: 100%;
   min-height: 44px;
+  box-sizing: border-box;
   border: 1px solid #c9d5e7;
   border-radius: 8px;
   padding: 8px 10px;
@@ -99,14 +122,25 @@ body.dr-workbench-page .pdf-workbench-shell input[type="number"] {
 
 body.dr-workbench-page .pdf-workbench-shell .passport-controls,
 body.dr-workbench-page .pdf-workbench-shell .pdf-resize-controls,
-body.dr-workbench-page .pdf-workbench-shell .pdf-to-images-controls {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
+body.dr-workbench-page .pdf-workbench-shell .pdf-to-images-controls,
+body.dr-workbench-page .pdf-workbench-shell .pdf-rotate-controls {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 12px !important;
+}
+
+body.dr-workbench-page .pdf-workbench-shell .pdf-split-actions,
+body.dr-workbench-page .pdf-workbench-shell .pdf-resize-actions,
+body.dr-workbench-page .pdf-workbench-shell .pdf-to-images-actions,
+body.dr-workbench-page .pdf-workbench-shell .pdf-remove-actions,
+body.dr-workbench-page .pdf-workbench-shell .pdf-rotate-actions,
+body.dr-workbench-page .pdf-workbench-shell .pdf-reorder-actions,
+body.dr-workbench-page .pdf-workbench-shell .passport-controls {
+  margin-top: auto;
 }
 
 body.dr-workbench-page .pdf-workbench-shell button {
-  min-height: 48px;
+  min-height: 46px;
   font-size: 15px;
 }
 
@@ -119,16 +153,35 @@ body.dr-workbench-page .pdf-workbench-shell .tool-info {
   color: #47617f;
 }
 
+body.dr-workbench-page .pdf-image-preview-grid,
+body.dr-workbench-page .merge-pdf-cards,
+body.dr-workbench-page .pdf-page-preview-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+
+body.dr-workbench-page .pdf-image-preview-card,
+body.dr-workbench-page .merge-pdf-card,
+body.dr-workbench-page .pdf-page-preview-card {
+  width: 180px !important;
+  max-width: 180px !important;
+  box-sizing: border-box;
+}
+
 body.dr-workbench-page .tool-app-header {
   position: static;
 }
 
 body.dr-workbench-page .tool-app-top {
-  min-height: 84px;
+  min-height: 76px;
 }
 
 body.dr-workbench-page .tool-app-brand {
-  font-size: 25px;
+  font-size: 24px;
 }
 
 body.dr-workbench-page .tool-nav-strip {
@@ -140,20 +193,28 @@ body.dr-workbench-page .tool-nav-inner a.active {
   border-bottom-color: #ffd32a;
 }
 
+#pdfActionPanel {
+  display: none !important;
+}
+
 @media (max-width: 900px) {
   body.dr-workbench-page .pdf-workbench-shell {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    grid-template-areas: "upload" "preview" "options" !important;
   }
-  body.dr-workbench-page .pdf-workbench-shell > .background-preview-area,
-  body.dr-workbench-page .pdf-workbench-shell > .photo-processing-panel:not([hidden]) {
-    grid-column: 1;
+  body.dr-workbench-page .pdf-workbench-shell > .background-preview-area {
     border-right: 0;
+    border-bottom: 1px solid #dde6f3;
   }
   body.dr-workbench-page .pdf-workbench-shell > .background-tool-controls {
     flex-wrap: wrap;
+    justify-content: flex-start;
   }
   body.dr-workbench-page .pdf-workbench-shell > .background-tool-controls #pdfStatus {
     width: 100%;
+    max-width: none;
     margin-left: 0;
+    text-align: left;
   }
 }
