@@ -1,0 +1,51 @@
+name: Remove PDF Bottom Options
+
+on:
+  push:
+    paths:
+      - '.github/workflows/remove-pdf-bottom-options.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove duplicate PDF option cards
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('pdf-workbench.html')
+          text = path.read_text(encoding='utf-8-sig')
+
+          pattern = re.compile(
+              r'\n\s*<section\s+id="pdfActionPanel"\s+class="photo-action-panel"\s*>.*?</section>\s*\n',
+              re.S,
+          )
+          updated, count = pattern.subn('\n', text, count=1)
+          if count != 1:
+              raise SystemExit(f'Expected 1 pdfActionPanel, found {count}')
+
+          path.write_text(updated, encoding='utf-8')
+          print('Removed lower PDF option-card section successfully.')
+          PY
+
+      - name: Commit PDF workbench cleanup
+        shell: bash
+        run: |
+          git config user.name "Daksh Rojgar Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- pdf-workbench.html
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git commit -m "Remove duplicate PDF tool option cards"
+          git push origin HEAD:main
