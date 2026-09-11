@@ -1,0 +1,621 @@
+name: Apply Daksh Website UI Upgrade
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-site-ui-upgrade.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply UI and navigation fixes
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          def read(path):
+              return Path(path).read_text(encoding='utf-8-sig')
+
+          def write(path, text):
+              Path(path).write_text(text, encoding='utf-8')
+
+          SITE_CSS = r'''
+          /* Daksh Rojgar shared inner-page + tool-workbench upgrade */
+          :root {
+            --dr-blue: #173f92;
+            --dr-blue-2: #0b56d8;
+            --dr-dark: #0d1b34;
+            --dr-soft: #eef5ff;
+            --dr-border: #d7e3f4;
+            --dr-yellow: #ffcf33;
+            --dr-text: #10223f;
+            --dr-muted: #60708a;
+          }
+
+          body.home-v2.dr-inner-page,
+          body.dr-workbench-page {
+            background: #f4f7fb;
+            color: var(--dr-text);
+          }
+
+          /* Compact inner pages use the same Daksh header language as Home */
+          .dr-inner-page .legal-page {
+            padding: 28px 0 46px;
+            background: #f4f7fb;
+          }
+          .dr-inner-page .legal-page > .container {
+            width: min(1180px, calc(100% - 28px));
+            margin: 0 auto;
+          }
+          .dr-inner-page .legal-card {
+            background: #fff;
+            border: 1px solid var(--dr-border);
+            border-radius: 16px;
+            box-shadow: 0 12px 34px rgba(31, 61, 112, .08);
+            padding: 26px;
+          }
+          .dr-inner-page .legal-heading {
+            border-bottom: 1px solid #e7edf6;
+            padding-bottom: 18px;
+            margin-bottom: 18px;
+          }
+          .dr-inner-page .legal-heading > span {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            background: #e7f0ff;
+            color: #0757d5;
+            font-weight: 800;
+            font-size: 12px;
+            padding: 7px 11px;
+            text-transform: uppercase;
+          }
+          .dr-inner-page .legal-heading h1 {
+            color: var(--dr-dark);
+            font-size: clamp(26px, 4vw, 40px);
+            line-height: 1.15;
+            margin: 12px 0 8px;
+          }
+          .dr-inner-page .legal-heading p { color: var(--dr-muted); margin: 5px 0; }
+          .dr-inner-page .detail-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+          }
+          .dr-inner-page .detail-summary-grid > div {
+            background: #f7faff;
+            border: 1px solid #dce7f7;
+            border-radius: 12px;
+            padding: 14px;
+          }
+          .dr-inner-page .detail-summary-grid strong {
+            display: block;
+            color: #47617f;
+            font-size: 12px;
+            margin-bottom: 4px;
+          }
+          .dr-inner-page .detail-summary-grid span { font-weight: 800; color: var(--dr-dark); }
+          .dr-inner-page .detail-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0 26px;
+          }
+          .dr-inner-page .detail-button,
+          .dr-inner-page .listing-read-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border: 0;
+            border-radius: 9px;
+            background: #eef4ff;
+            color: #0b56d8;
+            font-weight: 800;
+            padding: 10px 15px;
+          }
+          .dr-inner-page .detail-button.primary,
+          .dr-inner-page .listing-read-button {
+            background: var(--dr-blue-2);
+            color: #fff;
+          }
+          .dr-inner-page .detail-section {
+            border-top: 1px solid #e6edf6;
+            padding: 20px 0 4px;
+          }
+          .dr-inner-page .detail-section h2 {
+            color: var(--dr-blue);
+            font-size: 20px;
+            margin: 0 0 12px;
+          }
+          .dr-inner-page .detail-text,
+          .dr-inner-page .rich-content { line-height: 1.7; color: #263a57; }
+
+          /* View All: compact notification list, slightly larger than Home rows */
+          .dr-listing-page .legal-page { padding-top: 22px; }
+          .dr-listing-page .listing-header {
+            background: #fff;
+            border: 1px solid var(--dr-border);
+            border-left: 5px solid var(--dr-blue-2);
+            border-radius: 13px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(31, 61, 112, .06);
+          }
+          .dr-listing-page .listing-header #listingLabel {
+            color: #0757d5;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: .08em;
+          }
+          .dr-listing-page .listing-header h1 {
+            margin: 5px 0 4px;
+            font-size: clamp(23px, 3vw, 31px);
+            color: var(--dr-dark);
+          }
+          .dr-listing-page .listing-header p { margin: 0; color: var(--dr-muted); }
+          .dr-listing-page .live-listing-grid {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
+          }
+          .dr-listing-page .live-listing-card {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-areas:
+              'meta date'
+              'title button'
+              'summary button';
+            align-items: center;
+            gap: 5px 18px;
+            background: #fff;
+            border: 1px solid #dce6f4;
+            border-radius: 12px;
+            padding: 15px 17px;
+            min-height: 108px;
+            box-shadow: 0 5px 18px rgba(31, 61, 112, .05);
+          }
+          .dr-listing-page .listing-meta { grid-area: meta; display: flex; gap: 8px; align-items: center; min-width: 0; }
+          .dr-listing-page .listing-meta > span {
+            background: #e8f1ff;
+            color: #0757d5;
+            border-radius: 999px;
+            padding: 5px 9px;
+            font-size: 11px;
+            font-weight: 900;
+            max-width: 360px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .dr-listing-page .listing-meta time { color: #60708a; font-size: 12px; }
+          .dr-listing-page .live-listing-card h2 {
+            grid-area: title;
+            font-size: 17px;
+            line-height: 1.3;
+            margin: 2px 0;
+            color: var(--dr-dark);
+          }
+          .dr-listing-page .live-listing-card > p {
+            grid-area: summary;
+            color: #50647f;
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.4;
+          }
+          .dr-listing-page .listing-read-button { grid-area: button; white-space: nowrap; align-self: center; }
+          .dr-listing-page .listing-state,
+          .dr-listing-page .listing-last-date { display: none !important; }
+          .dr-listing-page .listing-empty {
+            background: #fff;
+            border: 1px solid var(--dr-border);
+            border-radius: 14px;
+            padding: 30px;
+            text-align: center;
+          }
+
+          /* Tool pages / workbenches: clean utility-app layout in Daksh colours */
+          .tool-app-header {
+            background: #fff;
+            border-bottom: 1px solid #dce5f2;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 3px 14px rgba(26, 54, 98, .06);
+          }
+          .tool-app-top {
+            width: min(1240px, calc(100% - 28px));
+            margin: 0 auto;
+            min-height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+          }
+          .tool-app-brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: var(--dr-dark);
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 22px;
+          }
+          .tool-app-brand .tool-logo {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: var(--dr-blue);
+            color: #fff;
+            font-size: 15px;
+          }
+          .tool-app-brand small { display: block; color: #6a7b93; font-size: 11px; font-weight: 600; margin-top: 2px; }
+          .tool-home-links { display: flex; gap: 8px; align-items: center; }
+          .tool-home-links a {
+            text-decoration: none;
+            color: #17458e;
+            font-weight: 800;
+            border: 1px solid #d4e0f2;
+            border-radius: 8px;
+            padding: 8px 11px;
+          }
+          .tool-nav-strip {
+            background: var(--dr-blue);
+            overflow-x: auto;
+            scrollbar-width: thin;
+          }
+          .tool-nav-inner {
+            width: min(1240px, calc(100% - 20px));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            min-width: max-content;
+          }
+          .tool-nav-inner a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 13px;
+            padding: 13px 14px;
+            border-bottom: 3px solid transparent;
+          }
+          .tool-nav-inner a:hover,
+          .tool-nav-inner a.active { background: rgba(255,255,255,.08); border-bottom-color: var(--dr-yellow); }
+
+          body.dr-workbench-page .wrap {
+            width: min(1180px, calc(100% - 28px));
+            margin: 0 auto;
+            padding: 24px 0 42px;
+          }
+          body.dr-workbench-page .listing-hero {
+            text-align: center;
+            padding: 12px 0 18px;
+          }
+          body.dr-workbench-page .listing-hero .listing-label { color: #0a56d8; font-weight: 900; letter-spacing: .08em; }
+          body.dr-workbench-page .listing-hero h1 { font-size: clamp(28px, 4vw, 42px); margin: 6px 0; color: var(--dr-dark); }
+          body.dr-workbench-page .listing-hero p { color: #5f718c; margin: 0; }
+          body.dr-workbench-page .background-tool-panel,
+          body.dr-workbench-page .photo-processing-panel,
+          body.dr-workbench-page .pdf-workbench-shell {
+            background: #fff;
+            border: 1px solid #d9e4f3;
+            border-radius: 15px;
+            box-shadow: 0 12px 32px rgba(28, 57, 101, .07);
+          }
+          body.dr-workbench-page .background-tool-panel { padding: 22px; }
+          body.dr-workbench-page .background-upload-label,
+          body.dr-workbench-page button:not(.photo-action-card) {
+            background: var(--dr-blue-2) !important;
+            color: #fff !important;
+            border: 0 !important;
+            border-radius: 9px !important;
+            font-weight: 800 !important;
+          }
+          body.dr-workbench-page button:disabled { background: #aab8ca !important; }
+          body.dr-workbench-page .background-preview-box,
+          body.dr-workbench-page .passport-preview-wrapper {
+            border: 2px dashed #b7c9e2;
+            border-radius: 12px;
+            background-color: #fbfdff;
+          }
+          body.dr-workbench-page .photo-action-panel {
+            margin-top: 20px;
+            border-top: 1px solid #e0e8f3;
+            padding-top: 18px;
+          }
+          body.dr-workbench-page .photo-action-heading { margin-bottom: 10px; }
+          body.dr-workbench-page .photo-action-grid {
+            display: flex !important;
+            gap: 8px !important;
+            overflow-x: auto;
+            padding: 4px 2px 10px;
+            scroll-snap-type: x proximity;
+          }
+          body.dr-workbench-page .photo-action-card {
+            flex: 0 0 145px;
+            min-height: 82px !important;
+            padding: 10px !important;
+            border: 1px solid #d7e3f4 !important;
+            border-radius: 10px !important;
+            background: #f8fbff !important;
+            color: var(--dr-text) !important;
+            box-shadow: none !important;
+            scroll-snap-align: start;
+          }
+          body.dr-workbench-page .photo-action-card.active {
+            border-color: #0b56d8 !important;
+            background: #eaf2ff !important;
+          }
+          body.dr-workbench-page .photo-action-card span { font-size: 20px !important; }
+          body.dr-workbench-page .photo-action-card strong { font-size: 12px !important; }
+          body.dr-workbench-page .photo-action-card small { font-size: 10px !important; color: #687a93 !important; }
+          body.dr-workbench-page footer { margin-top: 0; }
+
+          @media (max-width: 760px) {
+            .dr-inner-page .detail-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .dr-listing-page .live-listing-card {
+              grid-template-columns: 1fr;
+              grid-template-areas: 'meta' 'title' 'summary' 'button';
+              gap: 7px;
+            }
+            .dr-listing-page .listing-read-button { justify-self: start; }
+            .tool-app-top { min-height: 60px; }
+            .tool-app-brand { font-size: 17px; }
+            .tool-home-links a { padding: 7px 8px; font-size: 12px; }
+          }
+          '''
+          write('site-upgrade.css', SITE_CSS.strip() + '\n')
+
+          SHELL_JS = r'''
+          (() => {
+            const year = document.getElementById('year') || document.getElementById('currentYear');
+            if (year) year.textContent = new Date().getFullYear();
+            const btn = document.getElementById('menuBtn');
+            const nav = document.getElementById('mainNav');
+            if (btn && nav) btn.addEventListener('click', () => nav.classList.toggle('open'));
+          })();
+          '''
+          write('site-shell.js', SHELL_JS.strip() + '\n')
+
+          COMMON_HEADER = r'''
+          <header class="dr-header">
+            <div class="dr-topbar"><div class="dr-topbar-inner">
+              <span>Employment • Education • Exam Information</span>
+              <div><a href="privacy-policy.html">Privacy</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact</a></div>
+            </div></div>
+            <div class="dr-brand-wrap">
+              <a class="dr-brand" href="index.html"><div class="dr-logo">DR</div><div><h1>DAKSH ROJGAR</h1><p>Employment News • Jobs • Exams • Results</p></div></a>
+              <div class="dr-brand-note"><strong>Independent Information Platform</strong><span>Verify important information from the original official source.</span></div>
+            </div>
+            <div class="nav">
+              <button id="menuBtn" type="button" aria-label="Open menu">☰</button>
+              <nav id="mainNav">
+                <a href="index.html">Home</a><a href="listing.html?module=jobs">Latest Jobs</a><a href="listing.html?module=admit_card">Admit Cards</a><a href="listing.html?module=result">Results</a><a href="listing.html?module=answer_key">Answer Key</a><a href="listing.html?module=syllabus">Syllabus</a><a href="listing.html?module=current_affairs">Current Affairs</a><a href="listing.html?module=yojana">Schemes &amp; Yojana</a><a href="photo-tools.html">Photo Tools</a><a href="pdf-tools.html">PDF Tools</a>
+              </nav>
+            </div>
+          </header>
+          '''.strip()
+
+          COMMON_FOOTER = r'''
+          <footer class="dr-footer">
+            <div class="dr-footer-inner">
+              <div class="dr-footer-brand"><h3>DAKSH ROJGAR</h3><p>Employment news, recruitment, admit cards, results, exam information और useful online tools.</p></div>
+              <div><h4>Updates</h4><a href="listing.html?module=jobs">Latest Jobs</a><a href="listing.html?module=admit_card">Admit Cards</a><a href="listing.html?module=result">Results</a><a href="listing.html?module=answer_key">Answer Key</a></div>
+              <div><h4>Resources</h4><a href="listing.html?module=syllabus">Syllabus</a><a href="listing.html?module=current_affairs">Current Affairs</a><a href="listing.html?module=yojana">Schemes &amp; Yojana</a><a href="photo-tools.html">Photo Tools</a><a href="pdf-tools.html">PDF Tools</a></div>
+              <div><h4>Legal &amp; Contact</h4><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact</a></div>
+            </div>
+            <div class="dr-copy"><span>© <span id="currentYear">2026</span> Daksh Rojgar. All rights reserved.</span><span>Viratnagar, Rajasthan, India</span></div>
+          </footer>
+          '''.strip()
+
+          def upgrade_inner_html(path, listing=False):
+              text = read(path)
+              text = re.sub(r'<html lang="[^"]+">', '<html lang="hi-IN">', text, count=1)
+              if 'home-redesign.css' not in text:
+                  text = text.replace('<link rel="stylesheet" href="style.css">', '<link rel="stylesheet" href="style.css">\n    <link rel="stylesheet" href="home-redesign.css">\n    <link rel="stylesheet" href="site-upgrade.css">')
+              elif 'site-upgrade.css' not in text:
+                  text = text.replace('<link rel="stylesheet" href="home-redesign.css">', '<link rel="stylesheet" href="home-redesign.css">\n    <link rel="stylesheet" href="site-upgrade.css">')
+              body_class = 'home-v2 dr-inner-page dr-listing-page' if listing else 'home-v2 dr-inner-page'
+              text = re.sub(r'<body(?: class="[^"]*")?>', f'<body class="{body_class}">', text, count=1)
+              text = re.sub(r'<header class="legal-header">.*?</header>', COMMON_HEADER, text, count=1, flags=re.S)
+              text = re.sub(r'<footer class="legal-footer">.*?</footer>', COMMON_FOOTER, text, count=1, flags=re.S)
+              if 'site-shell.js' not in text:
+                  text = text.replace('</body>', '<script src="site-shell.js"></script>\n</body>')
+              write(path, text)
+
+          upgrade_inner_html('listing.html', listing=True)
+          upgrade_inner_html('job.html')
+          upgrade_inner_html('post.html')
+
+          # Main page: jobs must always open internal detail first; ticker View All opens full list.
+          script = read('script.js')
+          script = re.sub(
+              r'/\*\s*\n\s*\* Job:.*?if \(\s*item\.source_type === "job"\s*\) \{.*?\n\s*\}',
+              '''/*\n     * Job:\n     * Always open Daksh Rojgar internal detail first.\n     */\n    if (item.source_type === "job" && item.id) {\n        return {\n            url: `job.html?id=${encodeURIComponent(item.id)}`,\n            external: false,\n        };\n    }''',
+              script,
+              count=1,
+              flags=re.S,
+          )
+          script = script.replace('href="#"\n                id="viewAllUpdates"', 'href="listing.html?module=all_updates"\n                id="viewAllUpdates"')
+          script = script.replace('href="#"\n            id="viewAllUpdates"', 'href="listing.html?module=all_updates"\n            id="viewAllUpdates"')
+          script = re.sub(
+              r'\n\s*const viewAllButton =\s*document\.getElementById\(\s*"viewAllUpdates"\s*\);.*?\n\s*}\n(?=\n/\* =================================\n   Search)',
+              '\n',
+              script,
+              count=1,
+              flags=re.S,
+          )
+          write('script.js', script)
+
+          LISTING_JS = r'''
+          "use strict";
+          const API_BASE_URL = "https://daksh-rojgar-api.onrender.com";
+          const el = (id) => document.getElementById(id);
+          const listingContainer = el("listingContainer");
+          const listingTitle = el("listingTitle");
+          const listingLabel = el("listingLabel");
+          const listingDescription = el("listingDescription");
+
+          const MODULE_CONFIG = {
+            jobs: { title: "Latest Jobs", label: "LATEST RECRUITMENTS", description: "Latest Rajasthan, Central and Private job updates.", type: "job" },
+            admit_card: { title: "Admit Cards", label: "LATEST ADMIT CARDS", description: "Latest examination admit card notifications.", category: "admit_card", type: "post" },
+            result: { title: "Results", label: "LATEST RESULTS", description: "Latest recruitment and examination results.", category: "result", type: "post" },
+            answer_key: { title: "Answer Key", label: "LATEST ANSWER KEYS", description: "Latest provisional and final answer keys.", category: "answer_key", type: "post" },
+            syllabus: { title: "Syllabus", label: "LATEST SYLLABUS", description: "Exam syllabus and preparation updates.", category: "syllabus", type: "post" },
+            current_affairs: { title: "Current Affairs", label: "CURRENT AFFAIRS", description: "Current affairs and study updates.", category: "current_affairs", type: "post" },
+            yojana: { title: "Schemes & Yojana", label: "LATEST SCHEMES", description: "Useful Central and State scheme information.", category: "yojana", type: "post" },
+            all_updates: { title: "All Latest Updates", label: "ALL NOTIFICATIONS", description: "Jobs, admit cards, results, answer keys, syllabus and current affairs in one compact list.", type: "all" },
+            all_posts: { title: "All Updates", label: "LATEST POSTS", description: "All recent posts published through Daksh Rojgar.", type: "post" }
+          };
+
+          const norm = (v) => String(v || "").trim().toLowerCase().replaceAll("-", "_").replaceAll(" ", "_");
+          const moduleOf = (item) => {
+            if (item.source_type === "job") return "jobs";
+            const values = [item.category, item.module, item.post_type, item.type, item.section, item.content_type].map(norm);
+            for (const v of values) {
+              if (!v) continue;
+              if (v.includes("admit")) return "admit_card";
+              if (v.includes("result")) return "result";
+              if (v === "answerkey" || v.includes("answer_key")) return "answer_key";
+              if (v.includes("syllabus")) return "syllabus";
+              if (v.includes("current_affair")) return "current_affairs";
+              if (v.includes("yojana") || v.includes("scheme")) return "yojana";
+            }
+            return "";
+          };
+          const esc = (v) => String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+          const strip = (v) => new DOMParser().parseFromString(String(v || ""), "text/html").body.textContent.replace(/\s+/g," ").trim();
+          const itemDate = (i) => new Date(i.updated_at || i.created_at || i.post_date || 0);
+          const fmt = (i) => { const d=itemDate(i); return Number.isNaN(d.getTime()) || d.getTime()===0 ? "" : d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}); };
+          const titleOf = (i) => i.title_hi || i.title || "Latest Update";
+          const summaryOf = (i) => strip(i.short_summary_hi || i.short_summary || i.description_hi || i.description || i.content_hi || i.content || i.qualification || "View complete information.");
+          const categoryOf = (i) => i.source_type === "job" ? (i.organization_hi || i.organization || i.category || "Job") : (i.category || "Latest Update");
+          const detailOf = (i) => i.source_type === "job" ? `job.html?id=${encodeURIComponent(i.id)}` : `post.html?id=${encodeURIComponent(i.id)}`;
+
+          function render(items) {
+            if (!items.length) {
+              listingContainer.innerHTML = '<div class="listing-empty"><h2>अभी कोई update उपलब्ध नहीं है</h2><p>नई जानकारी publish होने पर यहाँ दिखाई देगी।</p></div>';
+              return;
+            }
+            listingContainer.innerHTML = items.map(i => {
+              const s = summaryOf(i); const short = s.length > 135 ? s.slice(0,135) + "..." : s;
+              return `<article class="live-listing-card">
+                <div class="listing-meta"><span>${esc(categoryOf(i))}</span>${fmt(i)?`<time>${esc(fmt(i))}</time>`:""}</div>
+                <h2>${esc(titleOf(i))}</h2>
+                <p>${esc(short)}</p>
+                <a class="listing-read-button" href="${esc(detailOf(i))}">पूरा विवरण →</a>
+              </article>`;
+            }).join("");
+          }
+
+          async function fetchJson(url) {
+            const r = await fetch(url, { headers: { Accept: "application/json" } });
+            if (!r.ok) throw new Error(`API request failed: ${r.status}`);
+            const d = await r.json();
+            return Array.isArray(d) ? d : [];
+          }
+
+          async function load() {
+            try {
+              const moduleName = new URLSearchParams(location.search).get("module") || "all_updates";
+              const cfg = MODULE_CONFIG[moduleName] || MODULE_CONFIG.all_updates;
+              listingTitle.textContent = cfg.title;
+              listingLabel.textContent = cfg.label;
+              listingDescription.textContent = cfg.description;
+              document.title = `${cfg.title} | Daksh Rojgar`;
+
+              let items = [];
+              if (cfg.type === "job") {
+                items = (await fetchJson(`${API_BASE_URL}/api/jobs`)).map(i => ({...i, source_type:"job"}));
+              } else if (cfg.type === "post") {
+                items = (await fetchJson(`${API_BASE_URL}/api/posts`)).map(i => ({...i, source_type:"post"}));
+                if (cfg.category) items = items.filter(i => moduleOf(i) === cfg.category);
+              } else {
+                const [jobs, posts] = await Promise.all([
+                  fetchJson(`${API_BASE_URL}/api/jobs`),
+                  fetchJson(`${API_BASE_URL}/api/posts`)
+                ]);
+                items = [...jobs.map(i=>({...i,source_type:"job"})), ...posts.map(i=>({...i,source_type:"post"}))];
+              }
+              items.sort((a,b) => itemDate(b) - itemDate(a));
+              render(items);
+            } catch (err) {
+              console.error(err);
+              listingContainer.innerHTML = `<div class="listing-empty"><h2>Updates load नहीं हो पाए</h2><p>${esc(err.message || "Unknown error")}</p></div>`;
+            }
+          }
+          load();
+          '''
+          write('listing.js', LISTING_JS.strip() + '\n')
+
+          def tool_header(kind):
+              if kind == 'photo':
+                  brand_sub = 'Photo Tools'
+                  home_other = '<a href="pdf-tools.html">PDF Tools</a>'
+                  links = [
+                    ('Background','photo-workbench.html?tool=background'),('Passport Size','photo-workbench.html?tool=passport'),('4×6 Maker','photo-workbench.html?tool=4x6'),('Name Add','photo-workbench.html?tool=name-add'),('Resize','photo-workbench.html?tool=resize'),('Compress','photo-workbench.html?tool=compress'),('Crop','photo-workbench.html?tool=crop'),('JPG / PNG','photo-workbench.html?tool=convert'),('Size in KB','photo-workbench.html?tool=kb')
+                  ]
+              else:
+                  brand_sub = 'PDF Tools'
+                  home_other = '<a href="photo-tools.html">Photo Tools</a>'
+                  links = [
+                    ('Merge PDF','pdf-workbench.html?tool=merge'),('Split PDF','pdf-workbench.html?tool=split'),('Resize PDF in KB','pdf-workbench.html?tool=resize-kb'),('Images to PDF','pdf-workbench.html?tool=image-to-pdf'),('PDF to Images','pdf-workbench.html?tool=pdf-to-image'),('Remove Pages','pdf-workbench.html?tool=remove-pages'),('Rotate','pdf-workbench.html?tool=rotate'),('Reorder','pdf-workbench.html?tool=reorder')
+                  ]
+              nav = ''.join(f'<a href="{u}">{n}</a>' for n,u in links)
+              return f'''<header class="tool-app-header">
+                <div class="tool-app-top">
+                  <a class="tool-app-brand" href="index.html"><span class="tool-logo">DR</span><span>DAKSH ROJGAR<small>{brand_sub}</small></span></a>
+                  <div class="tool-home-links"><a href="index.html">Home</a>{home_other}</div>
+                </div>
+                <div class="tool-nav-strip"><nav class="tool-nav-inner">{nav}</nav></div>
+              </header>'''
+
+          def upgrade_workbench(path, kind):
+              text = read(path)
+              if 'site-upgrade.css' not in text:
+                  text = text.replace('<link rel="stylesheet" href="style.css">', '<link rel="stylesheet" href="style.css">\n    <link rel="stylesheet" href="site-upgrade.css">')
+              text = re.sub(r'<body(?: class="[^"]*")?>', '<body class="dr-workbench-page">', text, count=1)
+              if kind == 'photo':
+                  text = re.sub(r'<header>.*?</header>', tool_header(kind), text, count=1, flags=re.S)
+              else:
+                  text = re.sub(r'<header class="site-header">.*?</header>', tool_header(kind), text, count=1, flags=re.S)
+              write(path, text)
+
+          upgrade_workbench('photo-workbench.html', 'photo')
+          upgrade_workbench('pdf-workbench.html', 'pdf')
+
+          # Tool landing pages keep the approved main-site header, just load shared upgrades.
+          for path in ('photo-tools.html', 'pdf-tools.html'):
+              text = read(path)
+              if 'site-upgrade.css' not in text:
+                  text = text.replace('<link rel="stylesheet" href="home-redesign.css">', '<link rel="stylesheet" href="home-redesign.css">\n    <link rel="stylesheet" href="site-upgrade.css">')
+              write(path, text)
+
+          print('Daksh website UI upgrade applied successfully.')
+          PY
+
+      - name: Commit website upgrade
+        shell: bash
+        run: |
+          git config user.name "Daksh Rojgar Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- script.js listing.js listing.html job.html post.html photo-workbench.html pdf-workbench.html photo-tools.html pdf-tools.html site-upgrade.css site-shell.js
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Improve notification details, listings and tool workbenches"
+          git push origin HEAD:main
