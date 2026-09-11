@@ -1,9 +1,6 @@
 name: Direct Photo and PDF Tool Entry
 
 on:
-  push:
-    paths:
-      - '.github/workflows/direct-tools-entry.yml'
   workflow_dispatch:
 
 permissions:
@@ -36,35 +33,26 @@ jobs:
               if s != old:
                   p.write_text(s, encoding='utf-8')
 
-          # Keep old landing URLs useful by redirecting immediately.
-          photo_redirect = '''<!DOCTYPE html>
-<html lang="hi-IN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Photo Tools | Daksh Rojgar</title>
-  <meta http-equiv="refresh" content="0; url=photo-workbench.html?tool=background">
-  <link rel="canonical" href="https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/photo-workbench.html?tool=background">
-  <script>location.replace('photo-workbench.html?tool=background');</script>
-</head>
-<body></body>
-</html>
-'''
-          pdf_redirect = '''<!DOCTYPE html>
-<html lang="hi-IN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDF Tools | Daksh Rojgar</title>
-  <meta http-equiv="refresh" content="0; url=pdf-workbench.html?tool=image-to-pdf">
-  <link rel="canonical" href="https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/pdf-workbench.html?tool=image-to-pdf">
-  <script>location.replace('pdf-workbench.html?tool=image-to-pdf');</script>
-</head>
-<body></body>
-</html>
-'''
-          Path('photo-tools.html').write_text(photo_redirect, encoding='utf-8')
-          Path('pdf-tools.html').write_text(pdf_redirect, encoding='utf-8')
+          def redirect_page(title, target):
+              canonical = f'https://mukeshswamibiyawas-bot.github.io/daksh-rojgar-website/{target}'
+              return '\n'.join([
+                  '<!DOCTYPE html>',
+                  '<html lang="hi-IN">',
+                  '<head>',
+                  '  <meta charset="UTF-8">',
+                  '  <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+                  f'  <title>{title} | Daksh Rojgar</title>',
+                  f'  <meta http-equiv="refresh" content="0; url={target}">',
+                  f'  <link rel="canonical" href="{canonical}">',
+                  f"  <script>location.replace('{target}');</script>",
+                  '</head>',
+                  '<body></body>',
+                  '</html>',
+                  ''
+              ])
+
+          Path('photo-tools.html').write_text(redirect_page('Photo Tools', PHOTO_TARGET), encoding='utf-8')
+          Path('pdf-tools.html').write_text(redirect_page('PDF Tools', PDF_TARGET), encoding='utf-8')
           print('Direct tool entry applied')
           PY
 
