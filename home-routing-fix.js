@@ -10,6 +10,23 @@
             .catch((error) => {
                 console.warn("[Daksh Site] Service worker registration failed", error);
             });
+
+        document.addEventListener("click", async (event) => {
+            const anchor = event.target.closest('a[href^="pdf-workbench.html"]');
+            if (!anchor || navigator.serviceWorker.controller) return;
+
+            event.preventDefault();
+            const destination = anchor.href;
+
+            try {
+                await navigator.serviceWorker.ready;
+                await new Promise((resolve) => setTimeout(resolve, 150));
+            } catch (_) {
+                // Navigation should still continue even if registration is delayed.
+            }
+
+            window.location.href = destination;
+        });
     }
 
     const normalize = (value) =>
