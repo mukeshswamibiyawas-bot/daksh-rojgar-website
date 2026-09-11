@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -24,6 +24,7 @@
 
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="site-upgrade.css">
 
     <script
         src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"
@@ -35,60 +36,15 @@
 
 </head>
 
-<body>
+<body class="dr-workbench-page">
 
-<header class="site-header">
-
-    <div class="top-brand-bar">
-
-        <div class="top-side-text">
-            Online PDF Utility
-        </div>
-
-        <div class="brand-center">
-            <div class="main-brand">
-                DAKSH ◈ ROJGAR
-            </div>
-
-            <div class="brand-subtitle">
-                PDF Tools
-            </div>
-        </div>
-
-        <div class="top-side-text">
-            Free Online Tool
-        </div>
-
-    </div>
-
-    <nav class="main-navigation">
-
-        <button
-            id="menuBtn"
-            type="button"
-            aria-label="Open menu"
-        >
-            ☰
-        </button>
-
-        <a href="index.html">
-            Home
-        </a>
-
-        <a href="photo-tools.html">
-            Photo Tools
-        </a>
-
-        <a
-            href="pdf-tools.html"
-            class="active"
-        >
-            PDF Tools
-        </a>
-
-    </nav>
-
-</header>
+<header class="tool-app-header">
+      <div class="tool-app-top">
+        <a class="tool-app-brand" href="index.html"><span class="tool-logo">DR</span><span>DAKSH ROJGAR<small>PDF Tools</small></span></a>
+        <div class="tool-home-links"><a href="index.html">Home</a><a href="photo-tools.html">Photo Tools</a></div>
+      </div>
+      <div class="tool-nav-strip"><nav class="tool-nav-inner"><a href="pdf-workbench.html?tool=merge">Merge PDF</a><a href="pdf-workbench.html?tool=split">Split PDF</a><a href="pdf-workbench.html?tool=resize-kb">Resize PDF in KB</a><a href="pdf-workbench.html?tool=image-to-pdf">Images to PDF</a><a href="pdf-workbench.html?tool=pdf-to-image">PDF to Images</a><a href="pdf-workbench.html?tool=remove-pages">Remove Pages</a><a href="pdf-workbench.html?tool=rotate">Rotate</a><a href="pdf-workbench.html?tool=reorder">Reorder</a></nav></div>
+    </header>
 
 
 <main class="wrap">

@@ -1,487 +1,97 @@
 "use strict";
-
 const API_BASE_URL = "https://daksh-rojgar-api.onrender.com";
-
-const listingContainer = document.getElementById("listingContainer");
-const listingTitle = document.getElementById("listingTitle");
-const listingLabel = document.getElementById("listingLabel");
-const listingDescription = document.getElementById("listingDescription");
-const currentYear = document.getElementById("currentYear");
-
-if (currentYear) {
-    currentYear.textContent = new Date().getFullYear();
-}
+const el = (id) => document.getElementById(id);
+const listingContainer = el("listingContainer");
+const listingTitle = el("listingTitle");
+const listingLabel = el("listingLabel");
+const listingDescription = el("listingDescription");
 
 const MODULE_CONFIG = {
-    jobs: {
-        title: "Government Jobs",
-        label: "LATEST RECRUITMENTS",
-        description: "Latest Rajasthan, Central and Private job updates.",
-        endpoint: "/api/jobs",
-        type: "job",
-    },
-
-    admit_card: {
-        title: "Admit Cards",
-        label: "LATEST ADMIT CARDS",
-        description: "Download the latest examination admit cards.",
-        endpoint: "/api/posts?category=admit_card",
-        type: "post",
-    },
-
-    result: {
-        title: "Exam Results",
-        label: "LATEST RESULTS",
-        description: "Check the latest recruitment and examination results.",
-        endpoint: "/api/posts?category=result",
-        type: "post",
-    },
-
-    answer_key: {
-        title: "Answer Keys",
-        label: "LATEST ANSWER KEYS",
-        description: "Latest provisional and final answer keys.",
-        endpoint: "/api/posts?category=answer_key",
-        type: "post",
-    },
-
-    syllabus: {
-        title: "Syllabus",
-        label: "LATEST SYLLABUS",
-        description: "Exam syllabus and preparation-related updates.",
-        endpoint: "/api/posts?category=syllabus",
-        type: "post",
-    },
-
-    current_affairs: {
-        title: "Current Affairs",
-        label: "DAILY CURRENT AFFAIRS",
-        description: "Current affairs and useful study updates.",
-        endpoint: "/api/posts?category=current_affairs",
-        type: "post",
-    },
-
-    yojana: {
-        title: "Government Schemes",
-        label: "LATEST GOVERNMENT SCHEMES",
-        description: "Central and State Government scheme information.",
-        endpoint: "/api/posts?category=yojana",
-        type: "post",
-    },
-
-    rajasthan_info: {
-        title: "Rajasthan Information",
-        label: "RAJASTHAN UPDATES",
-        description: "Important Rajasthan information and updates.",
-        endpoint: "/api/posts?category=rajasthan_info",
-        type: "post",
-    },
-
-    emitra: {
-        title: "eMitra Updates",
-        label: "LATEST EMITRA INFORMATION",
-        description: "Important eMitra services and update information.",
-        endpoint: "/api/posts?category=emitra",
-        type: "post",
-    },
-
-    all_posts: {
-        title: "All Updates",
-        label: "LATEST POSTS",
-        description: "All recent posts published through Daksh Rojgar.",
-        endpoint: "/api/posts",
-        type: "post",
-    },
+  jobs: { title: "Latest Jobs", label: "LATEST RECRUITMENTS", description: "Latest Rajasthan, Central and Private job updates.", type: "job" },
+  admit_card: { title: "Admit Cards", label: "LATEST ADMIT CARDS", description: "Latest examination admit card notifications.", category: "admit_card", type: "post" },
+  result: { title: "Results", label: "LATEST RESULTS", description: "Latest recruitment and examination results.", category: "result", type: "post" },
+  answer_key: { title: "Answer Key", label: "LATEST ANSWER KEYS", description: "Latest provisional and final answer keys.", category: "answer_key", type: "post" },
+  syllabus: { title: "Syllabus", label: "LATEST SYLLABUS", description: "Exam syllabus and preparation updates.", category: "syllabus", type: "post" },
+  current_affairs: { title: "Current Affairs", label: "CURRENT AFFAIRS", description: "Current affairs and study updates.", category: "current_affairs", type: "post" },
+  yojana: { title: "Schemes & Yojana", label: "LATEST SCHEMES", description: "Useful Central and State scheme information.", category: "yojana", type: "post" },
+  all_updates: { title: "All Latest Updates", label: "ALL NOTIFICATIONS", description: "Jobs, admit cards, results, answer keys, syllabus and current affairs in one compact list.", type: "all" },
+  all_posts: { title: "All Updates", label: "LATEST POSTS", description: "All recent posts published through Daksh Rojgar.", type: "post" }
 };
 
+const norm = (v) => String(v || "").trim().toLowerCase().replaceAll("-", "_").replaceAll(" ", "_");
+const moduleOf = (item) => {
+  if (item.source_type === "job") return "jobs";
+  const values = [item.category, item.module, item.post_type, item.type, item.section, item.content_type].map(norm);
+  for (const v of values) {
+    if (!v) continue;
+    if (v.includes("admit")) return "admit_card";
+    if (v.includes("result")) return "result";
+    if (v === "answerkey" || v.includes("answer_key")) return "answer_key";
+    if (v.includes("syllabus")) return "syllabus";
+    if (v.includes("current_affair")) return "current_affairs";
+    if (v.includes("yojana") || v.includes("scheme")) return "yojana";
+  }
+  return "";
+};
+const esc = (v) => String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+const strip = (v) => new DOMParser().parseFromString(String(v || ""), "text/html").body.textContent.replace(/\s+/g," ").trim();
+const itemDate = (i) => new Date(i.updated_at || i.created_at || i.post_date || 0);
+const fmt = (i) => { const d=itemDate(i); return Number.isNaN(d.getTime()) || d.getTime()===0 ? "" : d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}); };
+const titleOf = (i) => i.title_hi || i.title || "Latest Update";
+const summaryOf = (i) => strip(i.short_summary_hi || i.short_summary || i.description_hi || i.description || i.content_hi || i.content || i.qualification || "View complete information.");
+const categoryOf = (i) => i.source_type === "job" ? (i.organization_hi || i.organization || i.category || "Job") : (i.category || "Latest Update");
+const detailOf = (i) => i.source_type === "job" ? `job.html?id=${encodeURIComponent(i.id)}` : `post.html?id=${encodeURIComponent(i.id)}`;
 
-/* =================================
-   Fast Listing Cache
-================================= */
-
-const DAKSH_LISTING_CACHE_PREFIX =
-    "daksh_listing_cache_v1:";
-
-function getListingCache(moduleName) {
-    try {
-        const raw =
-            localStorage.getItem(
-                DAKSH_LISTING_CACHE_PREFIX +
-                moduleName
-            );
-
-        if (!raw) {
-            return null;
-        }
-
-        const parsed =
-            JSON.parse(raw);
-
-        if (
-            !parsed ||
-            !Array.isArray(parsed.data)
-        ) {
-            return null;
-        }
-
-        return parsed.data;
-    } catch (error) {
-        console.warn(
-            "[Daksh Website] Listing cache read failed:",
-            error
-        );
-
-        return null;
-    }
+function render(items) {
+  if (!items.length) {
+    listingContainer.innerHTML = '<div class="listing-empty"><h2>अभी कोई update उपलब्ध नहीं है</h2><p>नई जानकारी publish होने पर यहाँ दिखाई देगी।</p></div>';
+    return;
+  }
+  listingContainer.innerHTML = items.map(i => {
+    const s = summaryOf(i); const short = s.length > 135 ? s.slice(0,135) + "..." : s;
+    return `<article class="live-listing-card">
+      <div class="listing-meta"><span>${esc(categoryOf(i))}</span>${fmt(i)?`<time>${esc(fmt(i))}</time>`:""}</div>
+      <h2>${esc(titleOf(i))}</h2>
+      <p>${esc(short)}</p>
+      <a class="listing-read-button" href="${esc(detailOf(i))}">पूरा विवरण →</a>
+    </article>`;
+  }).join("");
 }
 
-function saveListingCache(
-    moduleName,
-    items
-) {
-    try {
-        localStorage.setItem(
-            DAKSH_LISTING_CACHE_PREFIX +
-            moduleName,
-            JSON.stringify({
-                data: items,
-                savedAt: Date.now(),
-            })
-        );
-    } catch (error) {
-        console.warn(
-            "[Daksh Website] Listing cache save failed:",
-            error
-        );
-    }
+async function fetchJson(url) {
+  const r = await fetch(url, { headers: { Accept: "application/json" } });
+  if (!r.ok) throw new Error(`API request failed: ${r.status}`);
+  const d = await r.json();
+  return Array.isArray(d) ? d : [];
 }
 
+async function load() {
+  try {
+    const moduleName = new URLSearchParams(location.search).get("module") || "all_updates";
+    const cfg = MODULE_CONFIG[moduleName] || MODULE_CONFIG.all_updates;
+    listingTitle.textContent = cfg.title;
+    listingLabel.textContent = cfg.label;
+    listingDescription.textContent = cfg.description;
+    document.title = `${cfg.title} | Daksh Rojgar`;
 
-function escapeHtml(value) {
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-function stripHtml(value) {
-    const doc = new DOMParser().parseFromString(String(value || ""), "text/html");
-    return (doc.body.textContent || "").replace(/\s+/g, " ").trim();
-}
-function formatDate(value) {
-    if (!value) {
-        return "";
+    let items = [];
+    if (cfg.type === "job") {
+      items = (await fetchJson(`${API_BASE_URL}/api/jobs`)).map(i => ({...i, source_type:"job"}));
+    } else if (cfg.type === "post") {
+      items = (await fetchJson(`${API_BASE_URL}/api/posts`)).map(i => ({...i, source_type:"post"}));
+      if (cfg.category) items = items.filter(i => moduleOf(i) === cfg.category);
+    } else {
+      const [jobs, posts] = await Promise.all([
+        fetchJson(`${API_BASE_URL}/api/jobs`),
+        fetchJson(`${API_BASE_URL}/api/posts`)
+      ]);
+      items = [...jobs.map(i=>({...i,source_type:"job"})), ...posts.map(i=>({...i,source_type:"post"}))];
     }
-
-    const parsedDate = new Date(value);
-
-    if (Number.isNaN(parsedDate.getTime())) {
-        return "";
-    }
-
-    return parsedDate.toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-    });
+    items.sort((a,b) => itemDate(b) - itemDate(a));
+    render(items);
+  } catch (err) {
+    console.error(err);
+    listingContainer.innerHTML = `<div class="listing-empty"><h2>Updates load नहीं हो पाए</h2><p>${esc(err.message || "Unknown error")}</p></div>`;
+  }
 }
-
-function getItemTitle(item) {
-    return item.title_hi || item.title || "Latest Update";
-}
-
-function getItemSummary(item) {
-    return (
-        item.short_summary_hi ||
-        item.short_summary ||
-        item.description_hi ||
-        item.description ||
-        item.content_hi ||
-        item.content ||
-        item.qualification ||
-        "View complete information."
-    );
-}
-
-function getItemCategory(item, itemType) {
-    if (itemType === "job") {
-        return (
-            item.organization_hi ||
-            item.organization ||
-            item.category ||
-            "Government Job"
-        );
-    }
-
-    return item.category || "Latest Update";
-}
-
-function getDetailLink(item, itemType) {
-    if (!item || !item.id) {
-        return "#";
-    }
-
-    if (itemType === "job") {
-        /*
-         * जब job.html तैयार होगा तो यही link उसकी
-         * पूरी internal details खोलेगा।
-         */
-        return `job.html?id=${encodeURIComponent(item.id)}`;
-    }
-
-    return `post.html?id=${encodeURIComponent(item.id)}`;
-}
-
-function renderItems(items, itemType) {
-    if (!listingContainer) {
-        throw new Error("listingContainer element not found");
-    }
-
-    if (!Array.isArray(items)) {
-        throw new Error("API response is not an array");
-    }
-
-    if (items.length === 0) {
-        listingContainer.innerHTML = `
-            <div class="listing-empty">
-                <h2>No updates available</h2>
-                <p>
-                    Admin Panel से नई जानकारी publish होने पर
-                    वह अपने-आप यहाँ दिखाई देगी।
-                </p>
-            </div>
-        `;
-
-        return;
-    }
-
-    const cards = items.map((item) => {
-        const title = getItemTitle(item);
-        const rawSummary = getItemSummary(item);
-        const summary = stripHtml(rawSummary);
-        const shortSummary =
-            summary.length > 75
-                ? `${summary.slice(0, 75)}...`
-                : summary;
-
-        const category = getItemCategory(item, itemType);
-
-        const date = formatDate(
-            item.updated_at ||
-            item.created_at ||
-            item.post_date
-        );
-
-        const detailLink = getDetailLink(item, itemType);
-
-        const stateInfo =
-            itemType === "job" && item.state
-                ? `<span class="listing-state">${escapeHtml(item.state)}</span>`
-                : "";
-
-        const lastDate =
-            itemType === "job" && item.last_date
-                ? `
-                    <p class="listing-last-date">
-                        <strong>Last Date:</strong>
-                        ${escapeHtml(item.last_date)}
-                    </p>
-                `
-                : "";
-
-        return `
-            <article class="live-listing-card">
-                <div class="listing-meta">
-                    <span>${escapeHtml(category)}</span>
-                    ${date ? `<time>${escapeHtml(date)}</time>` : ""}
-                </div>
-
-                ${stateInfo}
-
-                <h2>${escapeHtml(title)}</h2>
-
-                ${lastDate}
-
-                <p>${escapeHtml(shortSummary)}</p>
-
-                <a
-                    href="${escapeHtml(detailLink)}"
-                    class="listing-read-button"
-                >
-                    View Full Details →
-                </a>
-            </article>
-        `;
-    });
-
-    listingContainer.innerHTML = cards.join("");
-}
-
-function showLoadError(error) {
-    console.error("[Daksh Website] Listing failed:", error);
-
-    if (!listingContainer) {
-        return;
-    }
-
-    listingContainer.innerHTML = `
-        <div class="listing-empty">
-            <h2>Unable to load updates</h2>
-            <p>
-                ${escapeHtml(error?.message || "Unknown website error")}
-            </p>
-            <button
-                type="button"
-                class="listing-read-button"
-                onclick="window.location.reload()"
-            >
-                Try Again
-            </button>
-        </div>
-    `;
-}
-
-async function loadListing() {
-    let cachedItems = null;
-
-    try {
-        if (
-            !listingContainer ||
-            !listingTitle ||
-            !listingLabel ||
-            !listingDescription
-        ) {
-            throw new Error(
-                "Required listing page elements are missing"
-            );
-        }
-
-        const params =
-            new URLSearchParams(
-                window.location.search
-            );
-
-        const moduleName =
-            params.get("module") ||
-            "all_posts";
-
-        const config =
-            MODULE_CONFIG[moduleName] ||
-            MODULE_CONFIG.all_posts;
-
-        listingTitle.textContent =
-            config.title;
-
-        listingLabel.textContent =
-            config.label;
-
-        listingDescription.textContent =
-            config.description;
-
-        document.title =
-            `${config.title} | Daksh Rojgar`;
-
-        /*
-         * Show cached listing immediately.
-         */
-        cachedItems =
-            getListingCache(
-                moduleName
-            );
-
-        if (
-            Array.isArray(cachedItems)
-        ) {
-            renderItems(
-                cachedItems,
-                config.type
-            );
-
-            console.log(
-                `[Daksh Website] ${moduleName}: ${cachedItems.length} cached items shown instantly`
-            );
-        }
-
-        /*
-         * Refresh from backend in background.
-         */
-        const requestUrl =
-            `${API_BASE_URL}${config.endpoint}`;
-
-        console.log(
-            "[Daksh Website] Listing refresh:",
-            requestUrl
-        );
-
-        const response =
-            await fetch(
-                requestUrl,
-                {
-                    method: "GET",
-                    mode: "cors",
-                    cache: "default",
-                    headers: {
-                        Accept:
-                            "application/json",
-                    },
-                }
-            );
-
-        if (!response.ok) {
-            throw new Error(
-                `API request failed with status ${response.status}`
-            );
-        }
-
-        const items =
-            await response.json();
-
-        if (!Array.isArray(items)) {
-            throw new Error(
-                "API response is not an array"
-            );
-        }
-
-        saveListingCache(
-            moduleName,
-            items
-        );
-
-        renderItems(
-            items,
-            config.type
-        );
-
-        console.log(
-            `[Daksh Website] ${moduleName}: ${items.length} fresh items loaded`
-        );
-
-    } catch (error) {
-
-        console.error(
-            "[Daksh Website] Listing failed:",
-            error
-        );
-
-        /*
-         * If cache is already visible,
-         * do not replace it with an error.
-         */
-        if (
-            Array.isArray(cachedItems)
-        ) {
-            console.log(
-                "[Daksh Website] Keeping cached listing visible"
-            );
-
-            return;
-        }
-
-        showLoadError(error);
-    }
-}
-loadListing();
-
-
+load();

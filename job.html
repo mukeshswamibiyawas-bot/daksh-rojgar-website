@@ -1,5 +1,5 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="hi-IN">
 <head>
     <meta charset="UTF-8">
 
@@ -23,25 +23,27 @@
     <title>Job Details | Daksh Rojgar</title>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="home-redesign.css">
+    <link rel="stylesheet" href="site-upgrade.css">
 </head>
 
-<body>
+<body class="home-v2 dr-inner-page">
 
-<header class="legal-header">
-    <div class="container legal-nav">
-
-        <a href="index.html" class="legal-brand">
-            Daksh Rojgar
-        </a>
-
-        <a
-            href="listing.html?module=jobs"
-            class="back-home"
-        >
-            ← Back to Jobs
-        </a>
-
-    </div>
+<header class="dr-header">
+  <div class="dr-topbar"><div class="dr-topbar-inner">
+    <span>Employment • Education • Exam Information</span>
+    <div><a href="privacy-policy.html">Privacy</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact</a></div>
+  </div></div>
+  <div class="dr-brand-wrap">
+    <a class="dr-brand" href="index.html"><div class="dr-logo">DR</div><div><h1>DAKSH ROJGAR</h1><p>Employment News • Jobs • Exams • Results</p></div></a>
+    <div class="dr-brand-note"><strong>Independent Information Platform</strong><span>Verify important information from the original official source.</span></div>
+  </div>
+  <div class="nav">
+    <button id="menuBtn" type="button" aria-label="Open menu">☰</button>
+    <nav id="mainNav">
+      <a href="index.html">Home</a><a href="listing.html?module=jobs">Latest Jobs</a><a href="listing.html?module=admit_card">Admit Cards</a><a href="listing.html?module=result">Results</a><a href="listing.html?module=answer_key">Answer Key</a><a href="listing.html?module=syllabus">Syllabus</a><a href="listing.html?module=current_affairs">Current Affairs</a><a href="listing.html?module=yojana">Schemes &amp; Yojana</a><a href="photo-tools.html">Photo Tools</a><a href="pdf-tools.html">PDF Tools</a>
+    </nav>
+  </div>
 </header>
 
 <main class="legal-page">
@@ -61,27 +63,18 @@
 
 </main>
 
-<footer class="legal-footer">
-
-    <div class="container">
-
-        <p>
-            © <span id="currentYear">2026</span>
-            Daksh Rojgar. All rights reserved.
-        </p>
-
-        <div>
-            <a href="privacy-policy.html">Privacy Policy</a>
-            <a href="terms.html">Terms</a>
-            <a href="disclaimer.html">Disclaimer</a>
-            <a href="contact.html">Contact</a>
-        </div>
-
-    </div>
-
+<footer class="dr-footer">
+  <div class="dr-footer-inner">
+    <div class="dr-footer-brand"><h3>DAKSH ROJGAR</h3><p>Employment news, recruitment, admit cards, results, exam information और useful online tools.</p></div>
+    <div><h4>Updates</h4><a href="listing.html?module=jobs">Latest Jobs</a><a href="listing.html?module=admit_card">Admit Cards</a><a href="listing.html?module=result">Results</a><a href="listing.html?module=answer_key">Answer Key</a></div>
+    <div><h4>Resources</h4><a href="listing.html?module=syllabus">Syllabus</a><a href="listing.html?module=current_affairs">Current Affairs</a><a href="listing.html?module=yojana">Schemes &amp; Yojana</a><a href="photo-tools.html">Photo Tools</a><a href="pdf-tools.html">PDF Tools</a></div>
+    <div><h4>Legal &amp; Contact</h4><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a><a href="contact.html">Contact</a></div>
+  </div>
+  <div class="dr-copy"><span>© <span id="currentYear">2026</span> Daksh Rojgar. All rights reserved.</span><span>Viratnagar, Rajasthan, India</span></div>
 </footer>
 
 <script src="job-detail.js"></script>
 
+<script src="site-shell.js"></script>
 </body>
 </html>
