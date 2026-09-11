@@ -57,6 +57,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const config = map[requested] || map["image-to-pdf"];
   const shell = document.querySelector(".pdf-workbench-shell");
+  const actionPanel = document.getElementById("pdfActionPanel");
   const allPanels = [
     "mergePdfPanel",
     "splitPdfPanel",
@@ -82,28 +83,40 @@ window.addEventListener("DOMContentLoaded", () => {
     link.classList.toggle("active", link.href.includes(`tool=${requested}`));
   });
 
-  // pdf-workbench.js may temporarily move processing panels near the old
-  // hidden action chooser. After activation, always place the selected
-  // processing panel back inside the workbench so it appears on the right.
+  // The legacy PDF script inserts active panels immediately before
+  // #pdfActionPanel. Keep that hidden anchor inside the workbench first,
+  // so every tool stays in the right-side options column instead of moving
+  // below the footer.
+  if (shell && actionPanel && actionPanel.parentElement !== shell) {
+    shell.appendChild(actionPanel);
+  }
+
+  const normalizeActivePanel = () => {
+    if (!shell) return;
+
+    allPanels.forEach((id) => {
+      const panel = document.getElementById(id);
+      if (panel) panel.hidden = id !== config.panel;
+    });
+
+    const activePanel = document.getElementById(config.panel);
+    if (activePanel) {
+      activePanel.hidden = false;
+      if (actionPanel && actionPanel.parentElement === shell) {
+        shell.insertBefore(activePanel, actionPanel);
+      } else if (activePanel.parentElement !== shell) {
+        shell.appendChild(activePanel);
+      }
+    }
+
+    shell.dataset.activeTool = requested;
+  };
+
+  // pdf-workbench.js finishes its own DOMContentLoaded setup first.
   window.setTimeout(() => {
     const button = document.querySelector(config.selector);
     if (button) button.click();
-
-    window.setTimeout(() => {
-      if (!shell) return;
-
-      allPanels.forEach((id) => {
-        const panel = document.getElementById(id);
-        if (panel) panel.hidden = id !== config.panel;
-      });
-
-      const activePanel = document.getElementById(config.panel);
-      if (activePanel) {
-        activePanel.hidden = false;
-        shell.appendChild(activePanel);
-      }
-
-      shell.dataset.activeTool = requested;
-    }, 0);
+    window.setTimeout(normalizeActivePanel, 0);
+    window.setTimeout(normalizeActivePanel, 120);
   }, 80);
 });
