@@ -14,6 +14,7 @@ const MODULE_CONFIG = {
   syllabus: { title: "Syllabus", label: "LATEST SYLLABUS", description: "Exam syllabus and preparation updates.", category: "syllabus", type: "post" },
   current_affairs: { title: "Current Affairs", label: "CURRENT AFFAIRS", description: "Current affairs and study updates.", category: "current_affairs", type: "post" },
   yojana: { title: "Schemes & Yojana", label: "LATEST SCHEMES", description: "Useful Central and State scheme information.", category: "yojana", type: "post" },
+  rajasthan_info: { title: "Rajasthan Info", label: "RAJASTHAN INFORMATION", description: "Useful Rajasthan information, facts and educational updates.", category: "rajasthan_info", type: "post" },
   all_updates: { title: "All Latest Updates", label: "ALL NOTIFICATIONS", description: "Jobs, admit cards, results, answer keys, syllabus and current affairs in one compact list.", type: "all" },
   all_posts: { title: "All Updates", label: "LATEST POSTS", description: "All recent posts published through Daksh Rojgar.", type: "post" }
 };
@@ -30,10 +31,11 @@ const moduleOf = (item) => {
     if (v.includes("syllabus")) return "syllabus";
     if (v.includes("current_affair")) return "current_affairs";
     if (v.includes("yojana") || v.includes("scheme")) return "yojana";
+    if (v.includes("rajasthan_info") || v === "rajasthaninfo" || v.includes("rajasthan_information")) return "rajasthan_info";
   }
   return "";
 };
-const esc = (v) => String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+const esc = (v) => String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;");
 const strip = (v) => new DOMParser().parseFromString(String(v || ""), "text/html").body.textContent.replace(/\s+/g," ").trim();
 const itemDate = (i) => new Date(i.updated_at || i.created_at || i.post_date || 0);
 const fmt = (i) => { const d=itemDate(i); return Number.isNaN(d.getTime()) || d.getTime()===0 ? "" : d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}); };
