@@ -4,6 +4,35 @@
     const API_BASE_URL = "https://daksh-rojgar-api.onrender.com";
     let jobMap = new Map();
 
+    const addRajasthanInfoLinks = () => {
+        const nav = document.getElementById("mainNav");
+        if (nav && !nav.querySelector('a[href="listing.html?module=rajasthan_info"]')) {
+            const link = document.createElement("a");
+            link.href = "listing.html?module=rajasthan_info";
+            link.textContent = "Rajasthan Info";
+
+            const photoLink = nav.querySelector('a[href*="photo-"]');
+            if (photoLink) nav.insertBefore(link, photoLink);
+            else nav.appendChild(link);
+        }
+
+        document.querySelectorAll(".dr-footer-inner > div").forEach((section) => {
+            const heading = section.querySelector("h4");
+            if (!heading || heading.textContent.trim() !== "Resources") return;
+            if (section.querySelector('a[href="listing.html?module=rajasthan_info"]')) return;
+
+            const link = document.createElement("a");
+            link.href = "listing.html?module=rajasthan_info";
+            link.textContent = "Rajasthan Info";
+
+            const photoLink = section.querySelector('a[href*="photo-"]');
+            if (photoLink) section.insertBefore(link, photoLink);
+            else section.appendChild(link);
+        });
+    };
+
+    addRajasthanInfoLinks();
+
     if ("serviceWorker" in navigator) {
         navigator.serviceWorker
             .register("site-fixes-sw.js?v=20260911", { scope: "./" })
@@ -97,6 +126,7 @@
 
     const observer = new MutationObserver(() => {
         repairHomeJobLinks();
+        addRajasthanInfoLinks();
     });
 
     observer.observe(document.documentElement, {
