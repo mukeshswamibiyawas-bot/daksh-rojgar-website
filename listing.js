@@ -1,5 +1,7 @@
 "use strict";
 const API_BASE_URL = "https://daksh-rojgar-api.onrender.com";
+const CACHE_PREFIX = "daksh_listing_cache_v2_";
+const CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
 const el = (id) => document.getElementById(id);
 const listingContainer = el("listingContainer");
 const listingTitle = el("listingTitle");
@@ -35,6 +37,7 @@ const moduleOf = (item) => {
   }
   return "";
 };
+
 const esc = (v) => String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;");
 const strip = (v) => new DOMParser().parseFromString(String(v || ""), "text/html").body.textContent.replace(/\s+/g," ").trim();
 const itemDate = (i) => new Date(i.updated_at || i.created_at || i.post_date || 0);
@@ -50,7 +53,8 @@ function render(items) {
     return;
   }
   listingContainer.innerHTML = items.map(i => {
-    const s = summaryOf(i); const short = s.length > 135 ? s.slice(0,135) + "..." : s;
+    const s = summaryOf(i);
+    const short = s.length > 135 ? s.slice(0,135) + "..." : s;
     return `<article class="live-listing-card">
       <div class="listing-meta"><span>${esc(categoryOf(i))}</span>${fmt(i)?`<time>${esc(fmt(i))}</time>`:""}</div>
       <h2>${esc(titleOf(i))}</h2>
@@ -60,40 +64,75 @@ function render(items) {
   }).join("");
 }
 
+function readCache(moduleName) {
+  try {
+    const raw = localStorage.getItem(CACHE_PREFIX + moduleName);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed.items)) return null;
+    return parsed;
+  } catch (_) {
+    return null;
+  }
+}
+
+function writeCache(moduleName, items) {
+  try {
+    localStorage.setItem(CACHE_PREFIX + moduleName, JSON.stringify({savedAt: Date.now(), items}));
+  } catch (_) {}
+}
+
 async function fetchJson(url) {
-  const r = await fetch(url, { headers: { Accept: "application/json" } });
+  const r = await fetch(url, { headers: { Accept: "application/json" }, cache: "no-store" });
   if (!r.ok) throw new Error(`API request failed: ${r.status}`);
   const d = await r.json();
   return Array.isArray(d) ? d : [];
 }
 
-async function load() {
-  try {
-    const moduleName = new URLSearchParams(location.search).get("module") || "all_updates";
-    const cfg = MODULE_CONFIG[moduleName] || MODULE_CONFIG.all_updates;
-    listingTitle.textContent = cfg.title;
-    listingLabel.textContent = cfg.label;
-    listingDescription.textContent = cfg.description;
-    document.title = `${cfg.title} | Daksh Rojgar`;
+async function fetchModuleItems(cfg) {
+  let items = [];
+  if (cfg.type === "job") {
+    items = (await fetchJson(`${API_BASE_URL}/api/jobs`)).map(i => ({...i, source_type:"job"}));
+  } else if (cfg.type === "post") {
+    items = (await fetchJson(`${API_BASE_URL}/api/posts`)).map(i => ({...i, source_type:"post"}));
+    if (cfg.category) items = items.filter(i => moduleOf(i) === cfg.category);
+  } else {
+    const [jobs, posts] = await Promise.all([
+      fetchJson(`${API_BASE_URL}/api/jobs`),
+      fetchJson(`${API_BASE_URL}/api/posts`)
+    ]);
+    items = [...jobs.map(i=>({...i,source_type:"job"})), ...posts.map(i=>({...i,source_type:"post"}))];
+  }
+  items.sort((a,b) => itemDate(b) - itemDate(a));
+  return items;
+}
 
-    let items = [];
-    if (cfg.type === "job") {
-      items = (await fetchJson(`${API_BASE_URL}/api/jobs`)).map(i => ({...i, source_type:"job"}));
-    } else if (cfg.type === "post") {
-      items = (await fetchJson(`${API_BASE_URL}/api/posts`)).map(i => ({...i, source_type:"post"}));
-      if (cfg.category) items = items.filter(i => moduleOf(i) === cfg.category);
-    } else {
-      const [jobs, posts] = await Promise.all([
-        fetchJson(`${API_BASE_URL}/api/jobs`),
-        fetchJson(`${API_BASE_URL}/api/posts`)
-      ]);
-      items = [...jobs.map(i=>({...i,source_type:"job"})), ...posts.map(i=>({...i,source_type:"post"}))];
-    }
-    items.sort((a,b) => itemDate(b) - itemDate(a));
-    render(items);
+async function load() {
+  const moduleName = new URLSearchParams(location.search).get("module") || "all_updates";
+  const cfg = MODULE_CONFIG[moduleName] || MODULE_CONFIG.all_updates;
+  listingTitle.textContent = cfg.title;
+  listingLabel.textContent = cfg.label;
+  listingDescription.textContent = cfg.description;
+  document.title = `${cfg.title} | Daksh Rojgar`;
+
+  const cached = readCache(moduleName);
+  let hasVisibleData = false;
+
+  if (cached && cached.items.length) {
+    render(cached.items);
+    hasVisibleData = true;
+  }
+
+  try {
+    const freshItems = await fetchModuleItems(cfg);
+    render(freshItems);
+    writeCache(moduleName, freshItems);
   } catch (err) {
     console.error(err);
-    listingContainer.innerHTML = `<div class="listing-empty"><h2>Updates load नहीं हो पाए</h2><p>${esc(err.message || "Unknown error")}</p></div>`;
+    if (!hasVisibleData) {
+      listingContainer.innerHTML = `<div class="listing-empty"><h2>Updates load नहीं हो पाए</h2><p>${esc(err.message || "Unknown error")}</p></div>`;
+    }
   }
 }
+
 load();
