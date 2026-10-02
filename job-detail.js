@@ -186,7 +186,22 @@ function buildJobPostingDescription(job) {
         ["How to Apply", job.how_to_apply],
         ["Salary", job.salary],
     ];
-    return sections.filter(([, value]) => value).map(([label, value]) => "<p><strong>" + escapeHtml(label) + ":</strong> " + richContentToHtml(value) + "</p>").join("");
+
+    return sections
+        .filter(([, value]) => value)
+        .map(([label, value]) => {
+            const plainText = String(value)
+                .replace(/<[^>]*>/g, " ")
+                .replace(/\\s+/g, " ")
+                .trim();
+
+            return "<p><strong>" +
+                escapeHtml(label) +
+                ":</strong><br>" +
+                escapeHtml(plainText) +
+                "</p>";
+        })
+        .join("");
 }
 
 function setJobSeo(job, jobId) {
