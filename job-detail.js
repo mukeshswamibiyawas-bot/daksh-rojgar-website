@@ -151,6 +151,85 @@ function formatDate(value) {
     });
 }
 
+function normalizeDateForSchema(value, endOfDay = false) {
+    if (!value) return "";
+    const raw = String(value).trim();
+    let match = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) return match[1] + "-" + match[2] + "-" + match[3] + (endOfDay ? "T23:59:59+05:30" : "");
+    match = raw.match(/^(\d{2})[\\/-](\d{2})[\\/-](\d{4})/);
+    if (match) return match[3] + "-" + match[2] + "-" + match[1] + (endOfDay ? "T23:59:59+05:30" : "");
+    const parsed = new Date(raw);
+    if (Number.isNaN(parsed.getTime())) return "";
+    return parsed.toISOString().slice(0, 10) + (endOfDay ? "T23:59:59+05:30" : "");
+}
+
+function updateMeta(id, content) {
+    const element = document.getElementById(id);
+    if (element && content) element.setAttribute("content", content);
+}
+
+function buildSeoDescription(job) {
+    const source = job.short_summary_hi || job.short_summary || job.description_hi || job.description || "";
+    return String(source).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 155);
+}
+
+function buildJobPostingDescription(job) {
+    const sections = [
+        ["Description", job.description_hi || job.description],
+        ["Important Dates", job.important_dates],
+        ["Application Fee", job.application_fee],
+        ["Age Limit", job.age_limit],
+        ["Vacancy Details", job.vacancy_details],
+        ["Qualification", job.qualification],
+        ["Eligibility", job.eligibility],
+        ["Selection Mode", job.selection_mode],
+        ["How to Apply", job.how_to_apply],
+        ["Salary", job.salary],
+    ];
+    return sections.filter(([, value]) => value).map(([label, value]) => "<p><strong>" + escapeHtml(label) + ":</strong> " + richContentToHtml(value) + "</p>").join("");
+}
+
+function setJobSeo(job, jobId) {
+    const title = job.title_hi || job.title || "Government Job";
+    const organization = job.organization_hi || job.organization || "";
+    const pageUrl = window.location.origin + window.location.pathname + "?id=" + encodeURIComponent(jobId);
+    const seoTitle = organization ? title + " - " + organization + " | Daksh Rojgar" : title + " | Daksh Rojgar";
+    const description = buildSeoDescription(job) || "Latest " + title + " recruitment details, eligibility, dates and official application information on Daksh Rojgar.";
+    document.title = seoTitle;
+    const canonical = document.getElementById("pageCanonical");
+    if (canonical) canonical.setAttribute("href", pageUrl);
+    updateMeta("pageDescription", description);
+    updateMeta("ogTitle", seoTitle);
+    updateMeta("ogDescription", description);
+    updateMeta("ogUrl", pageUrl);
+    const existingSchema = document.getElementById("jobPostingSchema");
+    if (existingSchema) existingSchema.remove();
+    const datePosted = normalizeDateForSchema(job.post_date || job.created_at || job.updated_at);
+    const validThrough = normalizeDateForSchema(job.last_date, true);
+    const locationText = String(job.state || "").trim();
+    const genericLocations = new Set(["", "all india", "india", "central", "central government", "private"]);
+    const applyUrl = makeAbsoluteUrl(job.apply_link);
+    const descriptionHtml = buildJobPostingDescription(job);
+    if (!datePosted || !organization || !descriptionHtml || !applyUrl || genericLocations.has(locationText.toLowerCase())) return;
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "JobPosting",
+        "title": title,
+        "description": descriptionHtml,
+        "datePosted": datePosted,
+        "hiringOrganization": { "@type": "Organization", "name": organization },
+        "jobLocation": { "@type": "Place", "address": { "@type": "PostalAddress", "addressRegion": locationText, "addressCountry": "IN" } },
+        "url": pageUrl,
+    };
+    if (validThrough) schema.validThrough = validThrough;
+    const officialWebsite = makeAbsoluteUrl(job.official_website);
+    if (officialWebsite) schema.hiringOrganization.sameAs = officialWebsite;
+    const script = document.createElement("script");
+    script.id = "jobPostingSchema";
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify(schema);
+    document.head.appendChild(script);
+}
 function renderJob(job) {
     const title =
         job.title_hi ||
@@ -204,6 +283,8 @@ function renderJob(job) {
     ]
         .filter(Boolean)
         .join("");
+
+    setJobSeo(job, new URLSearchParams(window.location.search).get("id") || job.id || "");
 
     jobDetail.innerHTML = `
         <div class="legal-heading">
