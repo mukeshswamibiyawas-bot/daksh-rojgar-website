@@ -115,6 +115,57 @@ function renderSection(title, content) {
     `;
 }
 
+function normalizePostDate(value) {
+    if (!value) return "";
+    const raw = String(value).trim();
+    const match = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) return match[1] + "-" + match[2] + "-" + match[3];
+    const parsed = new Date(raw);
+    return Number.isNaN(parsed.getTime()) ? "" : parsed.toISOString().slice(0, 10);
+}
+
+function updatePostSeo(post, postId) {
+    const title = post.title_hi || post.title || "Exam Update";
+    const category = post.category || "Latest Update";
+    const organization = post.organization_hi || post.organization || "";
+    const summary = String(post.short_summary_hi || post.short_summary || post.content_hi || post.content || "")
+        .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    const description = (summary || (title + " की latest information, important dates, download links and official source on Daksh Rojgar.")).slice(0, 155);
+    const pageUrl = window.location.origin + window.location.pathname + "?id=" + encodeURIComponent(postId);
+    const seoTitle = organization ? title + " - " + organization + " | Daksh Rojgar" : title + " | Daksh Rojgar";
+    document.title = seoTitle;
+    const desc = document.getElementById("pageDescription");
+    if (desc) desc.setAttribute("content", description);
+    const canonical = document.getElementById("pageCanonical");
+    if (canonical) canonical.setAttribute("href", pageUrl);
+    const ogTitle = document.getElementById("ogTitle");
+    if (ogTitle) ogTitle.setAttribute("content", seoTitle);
+    const ogDescription = document.getElementById("ogDescription");
+    if (ogDescription) ogDescription.setAttribute("content", description);
+    const ogUrl = document.getElementById("ogUrl");
+    if (ogUrl) ogUrl.setAttribute("content", pageUrl);
+    const oldSchema = document.getElementById("postArticleSchema");
+    if (oldSchema) oldSchema.remove();
+    const datePublished = normalizePostDate(post.post_date || post.created_at || post.updated_at);
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "description": description,
+        "url": pageUrl,
+        "inLanguage": "hi-IN",
+        "isPartOf": { "@type": "WebSite", "name": "Daksh Rojgar", "url": window.location.origin + "/daksh-rojgar-website/" },
+    };
+    if (datePublished) schema.datePublished = datePublished;
+    if (organization) schema.publisher = { "@type": "Organization", "name": organization };
+    const image = makeAbsoluteUrl(post.image_url);
+    if (image) schema.image = [image];
+    const script = document.createElement("script");
+    script.id = "postArticleSchema";
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify(schema);
+    document.head.appendChild(script);
+}
 function renderPost(post) {
     const title =
         post.title_hi ||
