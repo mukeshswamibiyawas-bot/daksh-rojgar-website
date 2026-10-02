@@ -113,7 +113,12 @@ async function load() {
   listingTitle.textContent = cfg.title;
   listingLabel.textContent = cfg.label;
   listingDescription.textContent = cfg.description;
-  document.title = `${cfg.title} | Daksh Rojgar`;
+  const moduleUrl = window.location.origin + window.location.pathname + "?module=" + encodeURIComponent(moduleName);
+  document.title = cfg.title + " | Daksh Rojgar";
+  const metaDescription = document.getElementById("pageDescription");
+  if (metaDescription) metaDescription.setAttribute("content", cfg.description + " Official-source based updates from Daksh Rojgar.");
+  const canonical = document.getElementById("pageCanonical");
+  if (canonical) canonical.setAttribute("href", moduleUrl);
 
   const cached = readCache(moduleName);
   let hasVisibleData = false;
